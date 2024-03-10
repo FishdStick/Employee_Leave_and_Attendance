@@ -198,7 +198,7 @@
                                                         foreach($results as $result)
                                                 {   ?> 
                                                 <option value="<?php echo htmlentities($result->leaveType);?>"><?php echo htmlentities($result->leaveType);?></option>
-                                                <?php echo "test";}
+                                                <?php }
                                             } ?>
                                             </select>
                                         </div>
