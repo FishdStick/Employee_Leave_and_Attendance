@@ -4,7 +4,7 @@
         
         <li class="<?php if($page == 'attendance') {echo 'active';} ?>"><a href="attendance.php"><i class="ti-time"></i> <span>Attendance</span></a></li>
 
-        <li class="<?php if($page == 'employee') {echo 'active';} ?>"><a href="employees.php"><i class="ti-id-badge"></i> <span>Employee Section</span></a></li>
+        <li class="<?php if($page == 'employee') {echo 'active';} ?>"><a href="employees.php"><i class="ti-user"></i> <span>Employee Section</span></a></li>
                         
         <li class="<?php if($page == 'department') {echo 'active';} ?>"><a href="department.php"><i class="fa fa-th-large"></i> <span>Department Section</span></a></li>
 
