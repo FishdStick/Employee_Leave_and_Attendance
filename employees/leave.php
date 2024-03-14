@@ -74,6 +74,17 @@
     <div id="preloader">
         <div class="loader"></div>
     </div>
+
+    <!-- 
+        ADD CARDS THAT INDICATE THE FF:
+
+        NO. OF LEAVES LEFT 
+        THE LEAVES AVAILABLE TO THE EMPLOYEE
+        WHAT KIND OF EMPLOYEE THEY ARE
+        
+
+    -->
+ 
     <!-- preloader area end -->
     <!-- page container area start -->
     <div class="page-container">

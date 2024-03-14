@@ -35,9 +35,9 @@
 
 <body>
     <!-- Circular Loading Start -->
-    <!-- <div id="preloader">
+    <div id="preloader">
         <div class="loader"></div>
-    </div> -->
+    </div>
     <!-- Circular Loading End -->
     
     <div class="page-container">
@@ -265,11 +265,11 @@
 
                                                 <tbody>
                                                 <?php 
-                                                    $sql = "SELECT leave_requests.SN as lid,employee.fName,employee.empCode,employee.SN,leave_requests.leaveType,leave_requests.appliedOn,leave_requests.status from leave_requests join employee on leave_requests.requestee = employee.SN order by lid desc limit 7";
+                                                    $sql = "SELECT leave_requests.SN as lid,employee.SN,employee.empCode,employee.fName,leave_requests.leaveType,leave_requests.appliedOn,leave_requests.status from leave_requests join employee on leave_requests.requestee = employee.empCode order by lid desc limit 7";
                                                     $query = $dbh -> prepare($sql);
                                                     $query->execute();
-                                                    $results=$query->fetchAll(PDO::FETCH_OBJ);
-                                                    $cnt=1;
+                                                    $results = $query->fetchAll(PDO::FETCH_OBJ);
+                                                    $cnt = 1;
                                                     if($query->rowCount() > 0){
                                                     foreach($results as $result)
                                                     {         
@@ -277,18 +277,18 @@
 
                                         <tr>
                                             <td> <b><?php echo htmlentities($cnt);?></b></td>
-                                            <td><?php echo htmlentities($result->EmpId);?></td>
-                                            <td><a href="update-employee.php?empid=<?php echo htmlentities($result->id);?>" target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?></a></td>
-                                            <td><?php echo htmlentities($result->LeaveType);?></td>
-                                            <td><?php echo htmlentities($result->PostingDate);?></td>
-                                            <td><?php $stats=$result->Status;
+                                            <td><?php echo htmlentities($result->SN);?></td>
+                                            <td><a href="update-employee.php?empid=<?php echo htmlentities($result->SN);?>" target="_blank"><?php echo htmlentities($result->fName);?></a></td>
+                                            <td><?php echo htmlentities($result->leaveType);?></td>
+                                            <td><?php echo htmlentities($result->appliedOn);?></td>
+                                            <td><?php $stats=$result->status;
 
                                             if($stats==1){
                                              ?>
                                                  <span style="color: green">Approved <i class="fa fa-check-square-o"></i></span>
-                                                 <?php } if($stats==2)  { ?>
+                                                 <?php } if($stats == 2)  { ?>
                                                 <span style="color: red">Declined <i class="fa fa-times"></i></span>
-                                                 <?php } if($stats==0)  { ?>
+                                                 <?php } if($stats == 0)  { ?>
                                             <span style="color: blue">Pending <i class="fa fa-spinner"></i></span>
                                             <?php } ?>
 
