@@ -165,7 +165,7 @@
                                                 <tbody>
                                         <?php 
                                             $status=1;
-                                            $sql = "SELECT leave_requests.SN as lid,employee.fName,employee.empCode,employee.SN,leave_requests.leaveType,leave_requests.appliedOn,leave_requests.status from leave_requests join employee on leave_requests.requestee = employee.SN where leave_requests.status=:status order by lid desc";
+                                            $sql = "SELECT leave_requests.SN as lid,employee.fName,employee.empCode,employee.SN,leave_requests.leaveType,leave_requests.appliedOn,leave_requests.status from leave_requests join employee on leave_requests.requestee = employee.empCode where leave_requests.status=:status order by lid desc";
                                             $query = $dbh -> prepare($sql);
                                             $query->bindParam(':status',$status,PDO::PARAM_STR);
                                             $query->execute();
@@ -180,7 +180,7 @@
                                         <tr>
                                             <td> <b><?php echo htmlentities($cnt);?></b></td>
                                             <td><?php echo htmlentities($result->empCode);?></td>
-                                            <td><a href="update-employee.php?empid=<?php echo htmlentities($result->SN);?>" target="_blank"><?php echo htmlentities($result->fName);?></a></td>
+                                            <td><?php echo htmlentities($result->fName);?></td>
                                             <td><?php echo htmlentities($result->leaveType);?></td>
                                             <td><?php echo htmlentities($result->appliedOn);?></td>
                                             <td><?php $stats = $result->status;

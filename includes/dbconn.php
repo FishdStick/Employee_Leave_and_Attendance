@@ -1,7 +1,7 @@
 <?php 
     define('DB_HOST','localhost');
-    define('DB_USER','root');
-    define('DB_PASS','');
+    define('DB_USER','leaveAdmin');
+    define('DB_PASS','TestPassword21');
     define('DB_NAME','employee_leave_and_attendance');
     
     try

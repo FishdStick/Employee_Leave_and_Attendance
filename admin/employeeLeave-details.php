@@ -165,150 +165,122 @@
                                             
                                             <tbody>
 
-                                            <?php 
-                                            $lid = intval($_GET['leaveid']);
-                                            $sql = "SELECT leave_requests.SN as lid,employee.fName,employee.empCode,employee.SN,employee.email,leave_requests.leaveType,leave_requests.startDate,leave_requests.appliedOn,leave_requests.status,leave_requests.AdminRemark,leave_requests.AdminRemarkDate from leave_requests join employee on leave_requests.requestee = employee.SN where leave_requests.SN = :lid";
-                                            $query = $dbh -> prepare($sql);
-                                            $query->bindParam(':lid',$lid,PDO::PARAM_STR);
-                                            $query->execute();
-                                            $results=$query->fetchAll(PDO::FETCH_OBJ);
-                                            $cnt=1;
-                                            if($query->rowCount() > 0)
-                                            {
-                                            foreach($results as $result)
-                                            {         
-                                                ?>
+                                                        <?php 
+                                                        $lid = intval($_GET['leaveid']);
+                                                        $sql = "SELECT leave_requests.SN as lid,employee.fName,employee.empCode,employee.SN,employee.email,leave_requests.leaveType,leave_requests.startDate,leave_requests.endDate,leave_requests.appliedOn,leave_requests.status,leave_requests.description,leave_requests.AdminRemark,leave_requests.AdminRemarkDate from leave_requests join employee on leave_requests.requestee = employee.empCode where leave_requests.SN = :lid";
+                                                        $query = $dbh -> prepare($sql);
+                                                        $query->bindParam(':lid',$lid,PDO::PARAM_STR);
+                                                        $query->execute();
+                                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                                        $cnt=1;
+                                                        if($query->rowCount() > 0)
+                                                        {
+                                                        foreach($results as $result)
+                                                        { ?>
 
-                                                <tr>
+                                                            <tr>
+                                                                <td><b>Employee ID:</b></td>
+                                                                <td colspan="1"><?php echo htmlentities($result->empCode);?></td>
+                                                                <td><b>Employee Name:</b></td>
+                                                                <td><?php echo htmlentities($result->fName);?></a></td>
+                                                            </tr>
 
-                                                <td ><b>Employee ID:</b></td>
-                                              <td colspan="1"><?php echo htmlentities($result->EmpId);?></td>
-                                            <td> <b>Employee Name:</b></td>
-                                              <td colspan="1"><a href="update-employee.php?empid=<?php echo htmlentities($result->id);?>" target="_blank">
-                                                <?php echo htmlentities($result->FirstName." ".$result->LastName);?></a></td>
+                                                            <tr>
+                                                                <td ><b>Employee Email:</b></td>
+                                                                <td colspan="1"><?php echo htmlentities($result->email);?></td>
+                                                                <td ><b>Leave Type:</b></td>
+                                                                <td colspan="1"><?php echo htmlentities($result->leaveType);?></td>
+                                                            </tr>
 
-                                              <td ><b>Gender :</b></td>
-                                              <td colspan="1"><?php echo htmlentities($result->Gender);?></td>
-                                          </tr>
+                                                            <tr>
+                                                                <td ><b>Start Date:</b></td>
+                                                                <td colspan="1"><?php echo htmlentities($result->startDate);?></td>
+                                                                <td ><b>End Date:</b></td>
+                                                                <td colspan="1"><?php echo htmlentities($result->endDate);?></td>
+                                                            </tr>
 
-                                          <tr>
-                                             <td ><b>Employee Email:</b></td>
-                                            <td colspan="1"><?php echo htmlentities($result->EmailId);?></td>
-                                             <td ><b>Employee Contact:</b></td>
-                                            <td colspan="1"><?php echo htmlentities($result->Phonenumber);?></td>
+                                                            <tr>
+                                                                <td><b>Leave Applied:</b></td>
+                                                                <td><?php echo htmlentities($result->appliedOn);?></td>
+                                                                <td><b>Status:</b></td>
+                                                                <td><?php $stats = $result->status;
+                                                                    if($stats==1){?>
+                                                                        <span style="color: green">Approved</span>
+                                                                        <?php } if($stats==2)  { ?>
+                                                                        <span style="color: red">Declined</span>
+                                                                        <?php } if($stats==0)  { ?>
+                                                                        <span style="color: blue">Pending</span>
+                                                                        <?php } ?>
+                                                                </td>
+                                                            </tr>
 
-                                            <td ><b>Leave Type:</b></td>
-                                            <td colspan="1"><?php echo htmlentities($result->LeaveType);?></td>
-                                            
-                                        </tr>
+                                                            <tr>
+                                                                <td ><b>Leave Conditions: </b></td>
+                                                                <td colspan="5"><?php echo htmlentities($result->description);?></td>
+                                                            </tr>
 
-                                    <tr>
-                                             
-                                             <td ><b>Leave From:</b></td>
-                                            <td colspan="1"><?php echo htmlentities($result->FromDate);?></td>
-                                            <td><b>Leave Upto:</b></td>
-                                            <td colspan="1"><?php echo htmlentities($result->ToDate);?></td>
-                                            
-                                        </tr>
+                                                            <tr>
+                                                                <td><b>Admin Remark: </b></td>
+                                                                <td colspan = "12"><?php
+                                                                    if($result->AdminRemark == ""){
+                                                                        echo "Waiting for Action";  
+                                                                    }else{
+                                                                        echo htmlentities($result->AdminRemark);
+                                                                    }?>
+                                                                </td>
+                                                            </tr>
 
-                                    
+                                                            <tr>
+                                                                <td><b>Admin Action On: </b></td>
+                                                                <td>
+                                                                    <?php
+                                                                    if($result->AdminRemarkDate==""){
+                                                                        echo "NA";  
+                                                                    }else{
+                                                                        echo htmlentities($result->AdminRemarkDate);
+                                                                    }?>
+                                                                </td>
+                                                            </tr>
 
-                                <tr>
-                                <td ><b>Leave Applied:</b></td>
-                                <td><?php echo htmlentities($result->PostingDate);?></td>
-
-                                <td ><b>Status:</b></td>
-                                <td><?php $stats=$result->Status;
-                                if($stats==1){
-                                ?>
-                                    <span style="color: green">Approved</span>
-                                    <?php } if($stats==2)  { ?>
-                                    <span style="color: red">Declined</span>
-                                    <?php } if($stats==0)  { ?>
-                                    <span style="color: blue">Pending</span>
-                                    <?php } ?>
-                                    </td>
-
-                                    
-                                </tr>
-
-                                <tr>
-                                     <td ><b>Leave Conditions: </b></td>
-                                     <td colspan="5"><?php echo htmlentities($result->Description);?></td>
-                                          
-                                </tr>
-
-                                <tr>
-                                    <td ><b>Admin Remark: </b></td>
-                                    <td colspan="12"><?php
-                                    if($result->AdminRemark==""){
-                                    echo "Waiting for Action";  
-                                    }
-                                    else{
-                                    echo htmlentities($result->AdminRemark);
-                                    }
-                                    ?></td>
-                                </tr>
-
-                                <tr>
-                                <td ><b>Admin Action On: </b></td>
-                                    <td><?php
-                                    if($result->AdminRemarkDate==""){
-                                    echo "NA";  
-                                    }
-                                    else{
-                                    echo htmlentities($result->AdminRemarkDate);
-                                    }
-                                    ?></td>
-                                </tr>
-
-                                
-                                <?php 
-                                if($stats==0)
-                                {
-
-                                ?>
-                            <tr>
-                            <td colspan="12">
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">SET ACTION</button>
-                            
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">SET ACTION</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <form method="POST" name="adminaction">
-                                <div class="modal-body">
-                                
-                                    <select class="custom-select" name="status" required="">
-                                        <option value="">Choose...</option>
-                                        <option value="1">Approve</option>
-                                        <option value="2">Decline</option>
-                                    </select></p>
-                                    <br>
-                                    <p><textarea id="textarea1" name="description" class="form-control" name="description" placeholder="Description" row="5" maxlength="500" required></textarea></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" name="update">Apply</button>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-
-                            </td>
-                            </tr>
-                            <?php } ?>
-                            </form>
-                             </tr>
-                                         <?php $cnt++;} }?>
-                                    </tbody>
+                                                            <?php if($stats==0){?>
+                                                            <tr>
+                                                                <td colspan="12">
+                                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">SET ACTION</button>
+                                                            
+                                                                    <!-- Modal -->
+                                                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel">SET ACTION</h5>
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                    <form method="POST" name="adminaction">
+                                                                                    <div class="modal-body">
+                                                                                    
+                                                                                        <select class="custom-select" name="status" required="">
+                                                                                            <option value="">Choose...</option>
+                                                                                            <option value="1">Approve</option>
+                                                                                            <option value="2">Decline</option>
+                                                                                        </select></p>
+                                                                                        <br>
+                                                                                        <p><textarea id="textarea1" name="description" class="form-control" name="description" placeholder="Description" row="5" maxlength="500" required></textarea></p>
+                                                                                    </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                                                    <button type="submit" class="btn btn-success" name="update">Apply</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        </form>
+                                                    </tr>
+                                                    <?php $cnt++;} }?>
                                             </tbody>
                                         </table>
                                     </div>

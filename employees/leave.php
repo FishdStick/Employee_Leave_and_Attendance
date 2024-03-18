@@ -11,24 +11,26 @@
 
             $requesteeID = $_SESSION['empcode'];
             $leavetype = $_POST['leavetype'];
-            $fromdate = $_POST['fromdate'];  
+            $startDate = $_POST['startdate'];  
+            $endDate = $_POST['enddate'];  
             $description = $_POST['description'];  
             $status = 0;
             $isread = 0;
 
-        // if($fromdate > $todate){
-        //     $error=" Please enter correct details: Starting date must be before End date in order to be valid! ";
-        //     }
+        if($startDate > $endDate){
+            $error=" Please enter correct details: Starting date must be before End date in order to be valid! ";
+            }
 
-            $sql = "INSERT INTO leave_requests(requestee,leaveType,status,isRead,startDate,description) 
-            VALUES (:requesteeID,:leavetype,:status,:isread,:fromdate,:description)";
+            $sql = "INSERT INTO leave_requests(requestee,leaveType,status,isRead,startDate,endDate,description) 
+            VALUES (:requesteeID,:leavetype,:status,:isread,:startdate,:enddate,:description)";
 
             $query = $dbh->prepare($sql);
             $query->bindParam(':requesteeID',$requesteeID,PDO::PARAM_STR);
             $query->bindParam(':leavetype',$leavetype,PDO::PARAM_STR);
             $query->bindParam(':status',$status,PDO::PARAM_STR);
             $query->bindParam(':isread',$isread,PDO::PARAM_STR);
-            $query->bindParam(':fromdate',$fromdate,PDO::PARAM_STR);
+            $query->bindParam(':startdate',$startDate,PDO::PARAM_STR);
+            $query->bindParam(':enddate',$endDate,PDO::PARAM_STR);
             $query->bindParam(':description',$description,PDO::PARAM_STR);
 
             $query->execute();
@@ -187,13 +189,15 @@
 
                                         <div class="form-group">
                                             <label for="example-date-input" class="col-form-label">Starting Date</label>
-                                            <input class="form-control" type="date" value="" data-inputmask="'alias': 'date'" required id="example-date-input" name="fromdate">
+                                            <input class="form-control" type="date" value="" data-inputmask="'alias': 'date'" required id="example-date-input" name="startdate">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="example-text-input" class="col-form-label">Hours</label>
-                                            <input class="form-control" name="hours" type="text" id="example-text-input"></input>
+                                            <label for="example-date-input" class="col-form-label">Ending Date</label>
+                                            <input class="form-control" type="date" value="" data-inputmask="'alias': 'date'" required id="example-date-input" name="enddate">
                                         </div>
+
+
 
                                         <div class="form-group">
                                             <label class="col-form-label">Your Leave Type</label>

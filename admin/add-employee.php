@@ -256,7 +256,7 @@
                                             <label class="col-form-label">Position</label>
                                             <select class="custom-select" name="position" autocomplete="off">
                                                 <option value="">Choose...</option>
-                                                <?php $sql = "SELECT posCode from positions";
+                                                <?php $sql = "SELECT posCode FROM positions JOIN departments ON positions.department = departments.deptName";
                                                 $query = $dbh -> prepare($sql);
                                                 $query->execute();
                                                 $results=$query->fetchAll(PDO::FETCH_OBJ);

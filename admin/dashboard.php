@@ -129,7 +129,6 @@
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/leavetype-counter.php'?></h1>
-                                        <span>Leave Types</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales1" height="100"></canvas> -->
@@ -145,7 +144,6 @@
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/emp-counter.php'?></h1>
-                                        <span>Active Employees</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales2" height="100"></canvas> -->
@@ -161,7 +159,6 @@
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/dept-counter.php'?></h1>
-                                        <span>Employee Departments</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales3" height="100"></canvas> -->
@@ -177,12 +174,11 @@
                                 <div class="s-report-inner pr--20 pt--30 mb-3">
                                     <div class="icon"><i class="fa fa-spinner"></i></div>
                                     <div class="s-report-title d-flex justify-content-between">
-                                        <h4 class="header-title mb-0">Pending Application</h4>
+                                        <h4 class="header-title mb-0">Pending Requests</h4>
                                         
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/pendingapp-counter.php'?></h1>
-                                        <span>Pending</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales1" height="100"></canvas> -->
@@ -193,12 +189,11 @@
                                 <div class="s-report-inner pr--20 pt--30 mb-3">
                                     <div class="icon"><i class="fa fa-times"></i></div>
                                     <div class="s-report-title d-flex justify-content-between">
-                                        <h4 class="header-title mb-0">Declined Application</h4>
+                                        <h4 class="header-title mb-0">Declined Requests</h4>
                                         
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/declineapp-counter.php'?></h1>
-                                        <span>Declined</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales2" height="100"></canvas> -->
@@ -209,12 +204,11 @@
                                 <div class="s-report-inner pr--20 pt--30 mb-3">
                                     <div class="icon"><i class="fa fa-check-square-o"></i></div>
                                     <div class="s-report-title d-flex justify-content-between">
-                                        <h4 class="header-title mb-0">Approved Application</h4>
+                                        <h4 class="header-title mb-0">Approved Requests</h4>
                                         
                                     </div>
                                     <div class="d-flex justify-content-between pb-2">
                                         <h1><?php include 'counters/approvedapp-counter.php'?></h1>
-                                        <span>Approved</span>
                                     </div>
                                 </div>
                                 <!-- <canvas id="coin_sales3" height="100"></canvas> -->
@@ -253,7 +247,7 @@
 
                                                     <tr>
                                                         <td>S.N</td>
-                                                        <td>Employee ID</td>
+                                                        <td>Employee Code</td>
                                                         <td width="120">Full Name</td>
                                                         <td>Leave Type</td>
                                                         <td>Applied On</td>
@@ -276,28 +270,24 @@
                                                 ?>  
 
                                         <tr>
-                                            <td> <b><?php echo htmlentities($cnt);?></b></td>
-                                            <td><?php echo htmlentities($result->SN);?></td>
-                                            <td><a href="update-employee.php?empid=<?php echo htmlentities($result->SN);?>" target="_blank"><?php echo htmlentities($result->fName);?></a></td>
+                                            <td><b><?php echo htmlentities($cnt);?></b></td>
+                                            <td><?php echo htmlentities($result->empCode);?></td>
+                                            <td><?php echo htmlentities($result->fName);?></td>
                                             <td><?php echo htmlentities($result->leaveType);?></td>
                                             <td><?php echo htmlentities($result->appliedOn);?></td>
                                             <td><?php $stats=$result->status;
-
-                                            if($stats==1){
-                                             ?>
-                                                 <span style="color: green">Approved <i class="fa fa-check-square-o"></i></span>
-                                                 <?php } if($stats == 2)  { ?>
-                                                <span style="color: red">Declined <i class="fa fa-times"></i></span>
-                                                 <?php } if($stats == 0)  { ?>
-                                            <span style="color: blue">Pending <i class="fa fa-spinner"></i></span>
-                                            <?php } ?>
-
-
+                                                if($stats==1){ ?>
+                                                    <span style="color: green">Approved <i class="fa fa-check-square-o"></i></span>
+                                                    <?php } if($stats == 2)  { ?>
+                                                    <span style="color: red">Declined <i class="fa fa-times"></i></span>
+                                                    <?php } if($stats == 0)  { ?>
+                                                <span style="color: blue">Pending <i class="fa fa-spinner"></i></span>
+                                                <?php } ?>
                                              </td>
 
                                             
                                             <td><a href="employeeLeave-details.php?leaveid=<?php echo htmlentities($result->lid);?>" class="btn btn-secondary btn-sm">View Details</a></td>
-                                            </tr>
+                                        </tr>
                                                 <?php $cnt++;} }?>
                                             </tbody>
                                                 </table>

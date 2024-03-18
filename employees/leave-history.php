@@ -4,7 +4,7 @@
     error_reporting(0);
     include('includes/dbconn.php');
 
-    if(strlen($_SESSION['emplogin'])==0){   
+    if(strlen($_SESSION['emplogin']) == 0){   
     header('location:../index.php');
     }   else    {
 
@@ -143,19 +143,20 @@
                                                 <th>#</th>
                                                 <th width="150">Type</th>
                                                 <th>Conditions</th>
-                                                <th>From</th>
-                                                <th>To</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
                                                 <th width="150">Applied</th>
                                                 <th width="120">Admin's Remark</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            
                                         <?php 
-                                        $eid = $_SESSION['eid'];
-                                        $sql = "SELECT leaveType,startDate,appliedOn,description,AdminRemark,AdminRemarkDate,status from leave_rquests where requestee =:eid";
+                                        $eid = $_SESSION['empcode'];
+                                        $sql = "SELECT leaveType,startDate,endDate,appliedOn,description,AdminRemark,AdminRemarkDate,status from leave_requests where requestee =:empcode";
                                         $query = $dbh -> prepare($sql);
-                                        $query->bindParam(':eid',$eid,PDO::PARAM_STR);
+                                        $query->bindParam(':empcode',$eid,PDO::PARAM_STR);
                                         $query->execute();
                                         $results = $query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt = 1;
@@ -168,6 +169,7 @@
                                             <td><?php echo htmlentities($result->leaveType);?></td>
                                             <td><?php echo htmlentities($result->description);?></td>
                                             <td><?php echo htmlentities($result->startDate);?></td>
+                                            <td><?php echo htmlentities($result->endDate);?></td>
                                             <td><?php echo htmlentities($result->appliedOn);?></td>
                                             <td><?php if($result->AdminRemark=="")
                                             {

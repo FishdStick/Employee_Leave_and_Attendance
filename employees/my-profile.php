@@ -155,8 +155,8 @@
                                 <form name="addemp" method="POST">
 
                                     <div class="card-body">
-                                        <h4 class="header-title">Update My Profile</h4>
-                                        <p class="text-muted font-14 mb-4">Please make changes on the form below in order to update your profile</p>
+                                        <h4 class="header-title">Profile Details</h4>
+                                        <p class="text-muted font-14 mb-4">If there are details that need to be corrected, please contact IT.</p>
 
                                         <?php 
                                             $eid=$_SESSION['emplogin'];
@@ -174,7 +174,7 @@
 
                                         <div class="form-group">
                                             <label for="example-text-input" class="col-form-label">First Name</label>
-                                            <input class="form-control" name="firstName" value="<?php echo htmlentities($result->fName);?>"  type="text" required id="example-text-input">
+                                            <input class="form-control" name="firstName" value="<?php echo htmlentities($result->fName);?>" readonly type="text" required id="example-text-input">
                                         </div>
 
 
@@ -189,9 +189,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-form-label">Selected Department</label>
-                                            <select class="custom-select" name="department" autocomplete="off">
-                                            <option value="<?php echo htmlentities($result->department);?>"><?php echo htmlentities($result->department);?></option>
+                                            <label class="col-form-label">Department</label>
+                                            <select class="custom-select" name="department" id="department" autocomplete="off">
+                                            <option value="<?php echo htmlentities($result->department);?>" readonly><?php echo htmlentities($result->department);?></option>
 
                                             <?php $sql = "SELECT deptCode from departments";
                                                 $query = $dbh -> prepare($sql);
@@ -202,14 +202,24 @@
                                                 foreach($results as $deptResults)
                                                 {   
                                             ?>  
-                                                <option value="<?php echo htmlentities($deptResults->deptCode);?>"><?php echo htmlentities($deptResults->deptCode);?></option>
+                                                <option value="<?php echo htmlentities($deptResults->deptCode);?>" readonly><?php echo htmlentities($deptResults->deptCode);?></option>
                                         <?php }} ?>
                                         </select>
                                         </div>
 
+                                        <script>
+                                            window.onload = function() {
+                                                var departmentSelect = document.getElementById("department");
+                                                departmentSelect.disabled = true;
+
+                                                var positionSelect = document.getElementById("position");
+                                                positionSelect.disabled = true;
+                                            };
+                                        </script>
+
                                         <div class="form-group">
-                                            <label class="col-form-label">Selected Position</label>
-                                            <select class="custom-select" name="position" autocomplete="off">
+                                            <label class="col-form-label">Position</label>
+                                            <select class="custom-select" name="position" id="position" autocomplete="off">
                                             <option value="<?php echo htmlentities($result->position);?>"><?php echo htmlentities($result->position);?></option>
 
                                             <?php $sql = "SELECT posCode from positions";
@@ -228,8 +238,6 @@
 
                                         <?php }
                                         }?>
-
-                                        <button class="btn btn-primary" name="update" id="update" type="submit">MAKE CHANGES</button>
                                         
                                     </div>
                                 </form>
