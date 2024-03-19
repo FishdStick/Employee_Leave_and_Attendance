@@ -77,7 +77,9 @@
             <div class="login-box ptb--100">
                 <form method="POST" name="signin">
                     <div class="login-form-head">
-                        <img src="../assets/images/icon/logo.png" alt="logo">
+                    <div class="logo">                        
+                    <img src="https://tse3.mm.bing.net/th?id=OIP.aXJZ49qcluwKDwRciHj12wAAAA&pid=Api" alt="logo">
+                </div>
                         <h4>Employee Login</h4>
                         <p>Employee Leave Management System</p>
                         <?php if($msg){?><div class="errorWrap"><strong>Error</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>

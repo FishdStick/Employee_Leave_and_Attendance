@@ -139,7 +139,7 @@
 
 .sidebar-header {
   padding: 19px 32px 20px;
-  background: #fefae0;
+  background: #fee0e0;
   border-bottom: 1px solid #403233;
 }
 .sidebar-menu .logo {
@@ -2412,7 +2412,7 @@ table.dataTable thead td {
   height: 50px;
   border: none;
   background: #fff;
-  color: #585b5f;
+  color: #386641;
   border-radius: 40px;
   text-transform: uppercase;
   letter-spacing: 0;
@@ -2424,7 +2424,7 @@ table.dataTable thead td {
 }
 
 .submit-btn-area button:hover {
-  background: #2c71da;
+  background: #386641;
   color: #ffffff;
 }
 
