@@ -5,23 +5,45 @@
 
     include('../includes/dbconn.php');
 
-        if(strlen($_SESSION['alogin'])==0){   
-            header('location:index.php');
-        } else { 
-            if(isset($_GET['del'])){
-                $id = $_GET['del'];
-
-                $sql = "DELETE from departments  WHERE SN=:id";
-
+    if(strlen($_SESSION['alogin']) == 0){   
+        header('location:index.php');
+    } else {
+        if(isset($_POST['add'])){
+            try{
+                $pid = intval($_GET['posid']);
+                $poscode = $_POST['poscode'];
+                $department = $_POST['department'];
+                $posname = $_POST['posname'];
+  
+                $sql = "UPDATE positions
+                        SET posCode = :poscode, department = :department, posName =:posname) 
+                        WHERE SN = :pid";
                 $query = $dbh->prepare($sql);
-                $query -> bindParam(':id',$id, PDO::PARAM_STR);
-                $query -> execute();
+                $query->bindParam(':poscode',$poscode,PDO::PARAM_STR);
+                $query->bindParam(':department',$department,PDO::PARAM_STR);
+                $query->bindParam(':posname',$posname,PDO::PARAM_STR);
 
-                $msg = "The selected department has been deleted";
+                $query->execute();
+    
+                $lastInsertId = $dbh->lastInsertId();
+    
+                if($lastInsertId){
+                    $msg = "Record has been Updated successfully!";
+                } else {
+                    $error = "Record was not Updated!";
+                }
 
+            } catch (PDOException $errorMessage){
+                if ($errorMessage->errorInfo[1] == 1062) {
+                    $error = "Duplicate entry!";
+                } else {
+                    $error = "Record was not Updated!";
+                    // echo "Error: " . $e->getMessage();
+                }
             }
+        }
 
-?>
+ ?>
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -40,11 +62,6 @@
     <link rel="stylesheet" href="../assets/css/slicknav.min.css">
     <!-- amchart css -->
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-    <!-- Start datatable css -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
     <!-- others css -->
     <link rel="stylesheet" href="../assets/css/typography.css">
     <link rel="stylesheet" href="../assets/css/default-css.css">
@@ -52,17 +69,14 @@
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <!-- modernizr css -->
     <script src="../assets/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    
 </head>
 
 <body>
-    <!-- Circular Loading Start -->
-    <div id="preloader">
-        <div class="loader"></div>
-    </div>
-    <!-- Circular Loading End -->
-    
     <div class="page-container">
-        <!-- Vertical Navbar Start -->
+        
+        <!-- sidebar menu area start -->
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
@@ -72,14 +86,14 @@
             <div class="main-menu">
                 <div class="menu-inner">
                     <?php
-                        $page='department';
+                        $page='position';
                         include '../includes/admin-sidebar.php';
                     ?>
                 </div>
             </div>
         </div>
-        <!-- Vertical Navbar End -->
 
+        <!-- sidebar menu area end -->
         <!-- main content area start -->
         <div class="main-content">
             <!-- header area start -->
@@ -108,16 +122,15 @@
                 </div>
             </div>
             <!-- header area end -->
-            
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title pull-left">Department Section</h4>
-                            <ul class="breadcrumbs pull-left">
-                                <li><a href="dashboard.php">Home</a></li>
-                                <li><span>Department Management</span></li>
+                            <h4 class="page-title pull-left">Update Position</h4>
+                            <ul class="breadcrumbs pull-left"> 
+                                <li><a href="position.php">Position</a></li>
+                                <li><span>Add</span></li>
                                 
                             </ul>
                         </div>
@@ -137,13 +150,13 @@
             <!-- page title area end -->
             <div class="main-content-inner">
                 
-                
                 <!-- row area start -->
                 <div class="row">
-                    <!-- Dark table start -->
-                    <div class="col-12 mt-5">         
-                        <div class="card">
-                        <?php if($error){?><div class="alert alert-danger alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($error); ?>
+                <div class="col-lg-6 col-ml-12">
+                        <div class="row">
+                            <!-- Input form start -->
+                            <div class="col-12 mt-5">
+                            <?php if($error){?><div class="alert alert-danger alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($error); ?>
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -154,48 +167,70 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                                  </div><?php }?>
+                                <div class="card">
+                                <form name="addpos" method="POST">
 
-                            <div class="card-body">
-                                <div class="table-responsive data-tables datatable-dark">
-                                <center><a href="add-department.php" class="btn btn-sm btn-info">Add New Department</a></center>
-                                    <table id="dataTable3" class="table table-hover table-striped text-center">
-                                        <thead class="text-capitalize">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Code</th>
-                                                <th>Department</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $sql = "SELECT * from departments";
+                                    <div class="card-body">
+                                        <p class="text-muted font-14 mb-4">Fill Up the fields that need to be updated</p>
+
+                                        <?php 
+                                            $pid = intval($_GET['posid']);
+                                            $sql = "SELECT * from positions where SN = :pid";
                                             $query = $dbh -> prepare($sql);
+                                            $query -> bindParam(':pid',$pid, PDO::PARAM_STR);
                                             $query->execute();
                                             $results = $query->fetchAll(PDO::FETCH_OBJ);
                                             $cnt = 1;
-                                            if($query->rowCount() > 0)
-                                            {
-                                            foreach($results as $result)
-                                            {               ?>  
-                                            <tr>
-                                                <td><?php echo htmlentities($cnt);?></td>
-                                                <td><?php echo htmlentities($result->deptName);?></td>
-                                                <td><?php echo htmlentities($result->deptCode);?></td>
-                                                <td>
-                                                    <a href="edit-department.php?deptid=<?php echo htmlentities($result->SN);?>">
-                                                    <i class="fa fa-edit" style="color:green"></i></a>
-                                                    <a href="department.php?del=<?php echo htmlentities($result->SN);?>" onclick="return confirm('Do you want to delete');"> 
-                                                    <i class="fa fa-trash" style="color:red"></i></a>
-                                                </td>
-                                            </tr>
-                                         <?php $cnt++;} }?>
-                                    </tbody>
-                                    </table>
+
+                                            if($query->rowCount() > 0){
+                                                foreach($results as $result){ 
+                                                    $selectedDepartment = htmlentities($result->department);
+                                        ?> 
+                                        
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="col-form-label">Position Code</label>
+                                            <input class="form-control" name="poscode"  type="text" required id="example-text-input">
+                                        </div>
+
+                                        <!-- Department -->
+                                        <div class="form-group">
+                                            <label class="col-form-label">Department</label>
+                                            <select class="custom-select" name="department" autocomplete="off">
+                                                <option value="">Choose...</option>
+                                                <?php 
+
+                                                    $sql = "SELECT deptCode 
+                                                            FROM departments";
+
+                                                    $query = $dbh -> prepare($sql);
+                                                    $query->execute();
+                                                    $results = $query->fetchAll(PDO::FETCH_OBJ);
+                                                    $cnt = 1;
+                                                    if($query->rowCount() > 0){
+                                                    foreach($results as $result){ ?>
+                                                <option value="<?php echo htmlentities($result->deptCode); ?>">
+                                                    <?php echo htmlentities($result->deptCode); ?>
+                                                </option>
+
+                                                <?php }} ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="col-form-label">Position Name</label>
+                                            <input class="form-control" name="posname" type="text" autocomplete="off" required id="empcode">
+                                        </div>
+
+                                        <button class="btn btn-primary" name="add" id="add" type="submit" onclick="return valid();">PROCEED</button>
+                                        
+                                    </div>
+                                </form>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
-                    <!-- Dark table end -->
+                    <!-- Input Form Ending point -->
                     
                 </div>
                 <!-- row area end -->
@@ -234,13 +269,6 @@
     <script src="assets/js/line-chart.js"></script>
     <!-- all pie chart -->
     <script src="assets/js/pie-chart.js"></script>
-
-        <!-- Start datatable js -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
     
     <!-- others plugins -->
     <script src="../assets/js/plugins.js"></script>
@@ -249,4 +277,4 @@
 
 </html>
 
-<?php } ?>
+<?php }} }?>

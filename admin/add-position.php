@@ -83,7 +83,7 @@
             <div class="main-menu">
                 <div class="menu-inner">
                     <?php
-                        $page='employee';
+                        $page='position';
                         include '../includes/admin-sidebar.php';
                     ?>
                 </div>

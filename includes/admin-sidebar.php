@@ -6,9 +6,9 @@
                         
         <li class="<?php if($page == 'department') {echo 'active';} ?>"><a href="department.php"><i class="fa fa-th-large"></i> <span>Departments</span></a></li>
 
-        <li class="<?php if($page == 'attendance') {echo 'active';} ?>"><a href="position.php"><i class="fa fa-th-large"></i> <span>Positions</span></a></li>
+        <li class="<?php if($page == 'position') {echo 'active';} ?>"><a href="position.php"><i class="fa fa-th-large"></i> <span>Positions</span></a></li>
 
-         <li class="<?php if($page == 'leave') {echo 'active';} ?>"><a href="leave-section.php"><i class="fa fa-sign-out"></i> <span>Leave Types</span></a></li>
+        <li class="<?php if($page == 'leave') {echo 'active';} ?>"><a href="leave-section.php"><i class="fa fa-sign-out"></i> <span>Leave Types</span></a></li>
 
         <li class="<?php if($page == 'manage-leave') {echo 'active';} ?>">
             <a href="javascript:void(0)" aria-expanded="true"><i class="ti-briefcase"></i><span>Manage Leave</span></a>
