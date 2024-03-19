@@ -9,7 +9,7 @@
 
         // code for update the read notification status
         $isread=1;
-        $did=intval($_GET['leaveid']);  
+        $did = intval($_GET['leaveid']);  
         date_default_timezone_set('Asia/Kolkata');
         $admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
         $sql="UPDATE leave_requests set isRead=:isread where SN=:did";
@@ -35,7 +35,7 @@
             $query->execute();
 
             // $sql = "UPDATE leave_balance SET balance - (leave_requests.fromDate - leave_requests.toDate)
-            //         WHERE SN=:did";
+            //         WHERE employee = leave_requests.employee, leaveType = leave_requests.leaveType";
             // $query = $dbh->prepare($sql);
             // $query->bindParam(':description', $description, PDO::PARAM_STR);
             // $query->bindParam(':status', $status, PDO::PARAM_STR);
