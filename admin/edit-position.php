@@ -8,7 +8,7 @@
     if(strlen($_SESSION['alogin']) == 0){   
         header('location:index.php');
     } else {
-        if(isset($_POST['add'])){
+        if(isset($_POST['edit'])){
             try{
                 $pid = intval($_GET['posid']);
                 $poscode = $_POST['poscode'];
@@ -16,22 +16,17 @@
                 $posname = $_POST['posname'];
   
                 $sql = "UPDATE positions
-                        SET posCode = :poscode, department = :department, posName =:posname) 
+                        SET posCode = :poscode, posName =:posname 
                         WHERE SN = :pid";
                 $query = $dbh->prepare($sql);
+                $query->bindParam(':pid',$pid,PDO::PARAM_STR);
                 $query->bindParam(':poscode',$poscode,PDO::PARAM_STR);
-                $query->bindParam(':department',$department,PDO::PARAM_STR);
+                // $query->bindParam(':department',$department,PDO::PARAM_STR);
                 $query->bindParam(':posname',$posname,PDO::PARAM_STR);
-
+                
                 $query->execute();
-    
-                $lastInsertId = $dbh->lastInsertId();
-    
-                if($lastInsertId){
-                    $msg = "Record has been Updated successfully!";
-                } else {
-                    $error = "Record was not Updated!";
-                }
+
+                $msg = "Record has been Updated successfully!";
 
             } catch (PDOException $errorMessage){
                 if ($errorMessage->errorInfo[1] == 1062) {
@@ -130,7 +125,7 @@
                             <h4 class="page-title pull-left">Update Position</h4>
                             <ul class="breadcrumbs pull-left"> 
                                 <li><a href="position.php">Position</a></li>
-                                <li><span>Add</span></li>
+                                <li><span>Update</span></li>
                                 
                             </ul>
                         </div>
@@ -168,7 +163,7 @@
                                 </button>
                                  </div><?php }?>
                                 <div class="card">
-                                <form name="addpos" method="POST">
+                                <form name="editpos" method="POST">
 
                                     <div class="card-body">
                                         <p class="text-muted font-14 mb-4">Fill Up the fields that need to be updated</p>
@@ -184,44 +179,27 @@
 
                                             if($query->rowCount() > 0){
                                                 foreach($results as $result){ 
-                                                    $selectedDepartment = htmlentities($result->department);
                                         ?> 
                                         
                                         <div class="form-group">
                                             <label for="example-text-input" class="col-form-label">Position Code</label>
-                                            <input class="form-control" name="poscode"  type="text" required id="example-text-input">
+                                            <input class="form-control" name="poscode" value="<?php echo htmlentities($result->posCode);?>" type="text" required id="example-text-input">
                                         </div>
 
                                         <!-- Department -->
                                         <div class="form-group">
-                                            <label class="col-form-label">Department</label>
-                                            <select class="custom-select" name="department" autocomplete="off">
-                                                <option value="">Choose...</option>
-                                                <?php 
-
-                                                    $sql = "SELECT deptCode 
-                                                            FROM departments";
-
-                                                    $query = $dbh -> prepare($sql);
-                                                    $query->execute();
-                                                    $results = $query->fetchAll(PDO::FETCH_OBJ);
-                                                    $cnt = 1;
-                                                    if($query->rowCount() > 0){
-                                                    foreach($results as $result){ ?>
-                                                <option value="<?php echo htmlentities($result->deptCode); ?>">
-                                                    <?php echo htmlentities($result->deptCode); ?>
-                                                </option>
-
-                                                <?php }} ?>
-                                            </select>
+                                            <label for="example-text-input" class="col-form-label">Department</label>
+                                            <input class="form-control" name="department" value="<?php echo htmlentities($result->department);?>" type="text" readonly required id="example-text-input">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="example-text-input" class="col-form-label">Position Name</label>
-                                            <input class="form-control" name="posname" type="text" autocomplete="off" required id="empcode">
+                                            <input class="form-control" name="posname" value="<?php echo htmlentities($result->posName);?>" type="text" autocomplete="off" required id="empcode">
                                         </div>
 
-                                        <button class="btn btn-primary" name="add" id="add" type="submit" onclick="return valid();">PROCEED</button>
+                                        <?php }} ?>
+
+                                        <button class="btn btn-primary" name="edit" id="edit" type="submit">PROCEED</button>
                                         
                                     </div>
                                 </form>
@@ -277,4 +255,4 @@
 
 </html>
 
-<?php }} }?>
+<?php } ?>

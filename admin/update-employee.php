@@ -15,7 +15,9 @@
                 // $department = $_POST['department']; 
                 $position = $_POST['position']; 
 
-                $sql="UPDATE employee set fName =:fname, position =:position where SN=:eid";
+                $sql = "UPDATE employee 
+                        SET fName =:fname, position =:position 
+                        WHERE SN=:eid";
                 $query = $dbh->prepare($sql);
                 $query->bindParam(':fname',$fname,PDO::PARAM_STR);
                 // $query->bindParam(':department',$department,PDO::PARAM_STR);
@@ -209,8 +211,7 @@
                                                         </select>
                                                     </div>
 
-                                                <?php }
-                                        }?>
+                                                <?php } }?>
 
                                         <div class="form-group">
                                             <label for="example-text-input" class="col-form-label">Employee ID</label>
