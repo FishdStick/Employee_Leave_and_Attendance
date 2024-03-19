@@ -4,23 +4,9 @@
     error_reporting(0);
 
     include('../includes/dbconn.php');
-
-        if(strlen($_SESSION['alogin'])==0){   
-            header('location:index.php');
-        } else { 
-            if(isset($_GET['del'])){
-                $id = $_GET['del'];
-
-                $sql = "DELETE from departments  WHERE SN=:id";
-
-                $query = $dbh->prepare($sql);
-                $query -> bindParam(':id',$id, PDO::PARAM_STR);
-                $query -> execute();
-
-                $msg = "The selected department has been deleted";
-
-            }
-
+    if(strlen($_SESSION['emplogin']) == 0){   
+        header('location:../index.php');
+    }else{
 ?>
 
 <!doctype html>
@@ -29,7 +15,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Admin Panel - Employee Leave</title>
+    <title>Employee Panel - Employee Leave</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="../assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
@@ -72,17 +58,17 @@
             <div class="main-menu">
                 <div class="menu-inner">
                     <?php
-                        $page='department';
-                        include '../includes/admin-sidebar.php';
+                        $page='dashboard';
+                        include '../includes/employee-sidebar.php';
                     ?>
                 </div>
             </div>
         </div>
         <!-- Vertical Navbar End -->
 
-        <!-- main content area start -->
+        <!-- Main Dashboard Start -->
         <div class="main-content">
-            <!-- header area start -->
+            <!-- Header Start -->
             <div class="header-area">
                 <div class="row align-items-center">
                     <!-- nav and search button -->
@@ -94,56 +80,48 @@
                         </div>
                         
                     </div>
-                    <!-- profile info & task notification -->
+                    <!-- profile info-->
                     <div class="col-md-6 col-sm-4 clearfix">
                         <ul class="notification-area pull-right">
                             <li id="full-view"><i class="ti-fullscreen"></i></li>
                             <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
 
-                            <!-- Notification bell -->
-                            <?php include '../includes/admin-notification.php'?>
-
                         </ul>
                     </div>
                 </div>
             </div>
-            <!-- header area end -->
-            
+            <!-- Header End -->
+
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title pull-left">Department Section</h4>
+                            <h4 class="page-title pull-left">Dashboard</h4>
                             <ul class="breadcrumbs pull-left">
-                                <li><a href="dashboard.php">Home</a></li>
-                                <li><span>Department Management</span></li>
-                                
+                                <li><a href="employee-dashboard.php">Home</a></li>
+                                <li><span>Employee Dashboard</span></li>
                             </ul>
                         </div>
                     </div>
-                    
                     <div class="col-sm-6 clearfix">
-                        <div class="user-profile pull-right">
-                            <img class="avatar user-thumb" src="../assets/images/admin.png" alt="avatar">
-                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">ADMIN <i class="fa fa-angle-down"></i></h4>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="logout.php">Log Out</a>
-                            </div>
-                        </div>
+
+                        <?php include '../includes/employee-profile-section.php'?>
+
                     </div>
                 </div>
             </div>
             <!-- page title area end -->
+               
+            <!-- Main Dashboard Inner Start -->
             <div class="main-content-inner">
-                
-                
-                <!-- row area start -->
                 <div class="row">
-                    <!-- Dark table start -->
-                    <div class="col-12 mt-5">         
+                    <!-- data table start -->
+                    <div class="col-12 mt-5">
                         <div class="card">
-                        <?php if($error){?><div class="alert alert-danger alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($error); ?>
+                            <div class="card-body">
+                                <h4 class="header-title">Leave History Table</h4>
+                                <?php if($error){?><div class="alert alert-danger alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($error); ?>
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -154,61 +132,86 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                                  </div><?php }?>
-
-                            <div class="card-body">
-                                <div class="table-responsive data-tables datatable-dark">
-                                <center><a href="add-department.php" class="btn btn-sm btn-info">Add New Department</a></center>
-                                    <table id="dataTable3" class="table table-hover table-striped text-center">
-                                        <thead class="text-capitalize">
+                                <div class="data-tables">
+                                    <table id="dataTable" class="table table-hover progress-table text-center">
+                                        <thead class="bg-light text-capitalize">
                                             <tr>
                                                 <th>#</th>
-                                                <th>Department Name</th>
-                                                <th>Department Code</th>
-                                                <th></th>
+                                                <th width="150">Type</th>
+                                                <th>Conditions</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th width="150">Applied</th>
+                                                <th width="120">Admin's Remark</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $sql = "SELECT * from departments";
-                                            $query = $dbh -> prepare($sql);
-                                            $query->execute();
-                                            $results = $query->fetchAll(PDO::FETCH_OBJ);
-                                            $cnt = 1;
-                                            if($query->rowCount() > 0)
-                                            {
-                                            foreach($results as $result)
-                                            {               ?>  
+                                            
+                                        <?php 
+                                        $eid = $_SESSION['empcode'];
+                                        $sql = "SELECT leaveType,startDate,endDate,appliedOn,description,AdminRemark,AdminRemarkDate,status 
+                                                FROM leave_requests 
+                                                WHERE requestee =:empcode
+                                                ORDER BY SN DESC";
+                                        $query = $dbh -> prepare($sql);
+                                        $query->bindParam(':empcode',$eid,PDO::PARAM_STR);
+                                        $query->execute();
+                                        $results = $query->fetchAll(PDO::FETCH_OBJ);
+                                        $cnt = 1;
+                                        if($query->rowCount() > 0){
+                                        foreach($results as $result)
+                                        {  ?> 
+
                                             <tr>
-                                                <td><?php echo htmlentities($cnt);?></td>
-                                                <td><?php echo htmlentities($result->deptName);?></td>
-                                                <td><?php echo htmlentities($result->deptCode);?></td>
-                                                <td>
-                                                    <a href="edit-department.php?deptid=<?php echo htmlentities($result->SN);?>">
-                                                    <i class="fa fa-edit" style="color:green"></i></a>
-                                                    <a href="department.php?del=<?php echo htmlentities($result->SN);?>" onclick="return confirm('Do you want to delete');"> 
-                                                    <i class="fa fa-trash" style="color:red"></i></a>
-                                                </td>
-                                            </tr>
+                                            <td> <?php echo htmlentities($cnt);?></td>
+                                            <td><?php echo htmlentities($result->leaveType);?></td>
+                                            <td><?php echo htmlentities($result->description);?></td>
+                                            <td><?php echo htmlentities($result->startDate);?></td>
+                                            <td><?php echo htmlentities($result->endDate);?></td>
+                                            <td><?php echo htmlentities($result->appliedOn);?></td>
+                                            <td><?php if($result->AdminRemark=="")
+                                            {
+                                            echo htmlentities('Pending');
+                                            } else {
+
+                                            echo htmlentities(($result->AdminRemark)." "."at"." ".$result->AdminRemarkDate);
+                                            }
+
+                                            ?>
+                                            </td>
+
+                                            <td> <?php $stats=$result->status;
+                                                if($stats==1){ ?>
+                                                <span style="color: green">Approved <i class="fa fa-check-square-o"></i></span>
+                                                <?php } if($stats == 2)  { ?>
+                                                <span style="color: red">Declined <i class="fa fa-times"></i></span>
+                                                <?php } if($stats == 0)  { ?>
+                                                <span style="color: blue">Pending <i class="fa fa-spinner"></i></span>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+
                                          <?php $cnt++;} }?>
-                                    </tbody>
+                                          
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Dark table end -->
-                    
+                    <!-- data table end -->
                 </div>
-                <!-- row area end -->
-                
-                </div>
-                <!-- row area start-->
             </div>
-            <?php include '../includes/footer.php' ?>
-        <!-- footer area end-->
+            <!-- Main Dashboard Inner End -->
         </div>
-        <!-- main content area end -->
-
-        
+        <!-- Main Dashboard End -->
+        <?php include '../includes/footer.php' ?>
+        <!-- footer area end-->
+        <div class="offset-area">
+            <div class="offset-close"><i class="ti-close"></i></div>
+            
+        </div>
     </div>
     <!-- jquery latest version -->
     <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
@@ -219,6 +222,13 @@
     <script src="../assets/js/metisMenu.min.js"></script>
     <script src="../assets/js/jquery.slimscroll.min.js"></script>
     <script src="../assets/js/jquery.slicknav.min.js"></script>
+
+    <!-- Start datatable js -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
 
     <!-- start chart js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -234,13 +244,6 @@
     <script src="assets/js/line-chart.js"></script>
     <!-- all pie chart -->
     <script src="assets/js/pie-chart.js"></script>
-
-        <!-- Start datatable js -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
     
     <!-- others plugins -->
     <script src="../assets/js/plugins.js"></script>

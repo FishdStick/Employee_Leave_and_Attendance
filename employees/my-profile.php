@@ -72,21 +72,10 @@
             </div>
             <div class="main-menu">
                 <div class="menu-inner">
-                    <nav>
-                        <ul class="metismenu" id="menu">
-
-                            <li class="#">
-                                <a href="leave.php" aria-expanded="true"><i class="ti-user"></i><span>Apply Leave
-                                    </span></a>
-                            </li>
-
-                            <li class="#">
-                                <a href="leave-history.php" aria-expanded="true"><i class="ti-agenda"></i><span>View My Leave History
-                                    </span></a>
-                            </li>
-
-                        </ul>
-                    </nav>
+                    <?php
+                        $page='dashboard';
+                        include '../includes/employee-sidebar.php';
+                    ?>
                 </div>
             </div>
         </div>

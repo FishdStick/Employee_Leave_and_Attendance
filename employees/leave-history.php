@@ -16,7 +16,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Employee Leave Management System</title>
+    <title>Employee Panel - Employee Leave</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="../assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
@@ -47,6 +47,7 @@
         <div class="loader"></div>
     </div>
     <!-- preloader area end -->
+
     <!-- page container area start -->
     <div class="page-container">
         <!-- sidebar menu area start -->
@@ -58,25 +59,15 @@
             </div>
             <div class="main-menu">
                 <div class="menu-inner">
-                    <nav>
-                        <ul class="metismenu" id="menu">
-
-                            <li class="#">
-                                <a href="leave.php" aria-expanded="true"><i class="ti-user"></i><span>Apply Leave
-                                    </span></a>
-                            </li>
-
-                            <li class="active">
-                                <a href="leave-history.php" aria-expanded="true"><i class="ti-agenda"></i><span>View My Leave History
-                                    </span></a>
-                            </li>
-
-                        </ul>
-                    </nav>
+                        <?php
+                            $page='leave-history';
+                            include '../includes/employee-sidebar.php';
+                        ?>
                 </div>
             </div>
         </div>
         <!-- sidebar menu area end -->
+
         <!-- main content area start -->
         <div class="main-content">
             <!-- header area start -->
@@ -91,19 +82,18 @@
                         </div>
                         
                     </div>
-                    <!-- profile info & task notification -->
+                    <!-- profile info -->
                     <div class="col-md-6 col-sm-4 clearfix">
                         <ul class="notification-area pull-right">
                             <li id="full-view"><i class="ti-fullscreen"></i></li>
                             <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
-                            
-                            
                             
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- header area end -->
+
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">
@@ -154,7 +144,9 @@
                                             
                                         <?php 
                                         $eid = $_SESSION['empcode'];
-                                        $sql = "SELECT leaveType,startDate,endDate,appliedOn,description,AdminRemark,AdminRemarkDate,status from leave_requests where requestee =:empcode";
+                                        $sql = "SELECT leaveType,startDate,endDate,appliedOn,description,AdminRemark,AdminRemarkDate,status 
+                                                FROM leave_requests 
+                                                WHERE requestee =:empcode";
                                         $query = $dbh -> prepare($sql);
                                         $query->bindParam(':empcode',$eid,PDO::PARAM_STR);
                                         $query->execute();

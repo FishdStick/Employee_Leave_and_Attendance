@@ -99,25 +99,15 @@
             </div>
             <div class="main-menu">
                 <div class="menu-inner">
-                    <nav>
-                        <ul class="metismenu" id="menu">
-
-                            <li class="active">
-                                <a href="leave.php" aria-expanded="true"><i class="ti-user"></i><span>Apply Leave
-                                    </span></a>
-                            </li>
-
-                            <li class="#">
-                                <a href="leave-history.php" aria-expanded="true"><i class="ti-agenda"></i><span>View My Leave History
-                                    </span></a>
-                            </li>
-
-                        </ul>
-                    </nav>
+                    <?php
+                        $page='leave';
+                        include '../includes/employee-sidebar.php';
+                    ?>
                 </div>
             </div>
         </div>
         <!-- sidebar menu area end -->
+
         <!-- main content area start -->
         <div class="main-content">
             <!-- header area start -->
@@ -142,17 +132,17 @@
                     </div>
                 </div>
             </div>
-            <!-- header area end -->
+            <!-- header area end -->.
+            
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
                             <h4 class="page-title pull-left">Apply For Leave Days</h4>
-                            <ul class="breadcrumbs pull-left">
-                                
-                                <li><span>Leave Form</span></li>
-                            </ul>
+                                <ul class="breadcrumbs pull-left">
+                                    <li><span>Leave Form</span></li>
+                                </ul>
                         </div>
                     </div>
                     <div class="col-sm-6 clearfix">
@@ -244,8 +234,6 @@
     <!-- offset area start -->
     <div class="offset-area">
         <div class="offset-close"><i class="ti-close"></i></div>
-        
-        
     </div>
     <!-- offset area end -->
     <!-- jquery latest version -->

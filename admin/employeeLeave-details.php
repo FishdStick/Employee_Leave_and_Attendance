@@ -1,4 +1,5 @@
 <?php
+    
     session_start();
     error_reporting(0);
     include('../includes/dbconn.php');
@@ -6,34 +7,45 @@
     header('location:index.php');
     } else {
 
-    // code for update the read notification status
-    $isread=1;
-    $did=intval($_GET['leaveid']);  
-    date_default_timezone_set('Asia/Kolkata');
-    $admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
-    $sql="UPDATE leave_requests set isRead=:isread where SN=:did";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':isread',$isread,PDO::PARAM_STR);
-    $query->bindParam(':did',$did,PDO::PARAM_STR);
-    $query->execute();
+        // code for update the read notification status
+        $isread=1;
+        $did=intval($_GET['leaveid']);  
+        date_default_timezone_set('Asia/Kolkata');
+        $admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
+        $sql="UPDATE leave_requests set isRead=:isread where SN=:did";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':isread',$isread,PDO::PARAM_STR);
+        $query->bindParam(':did',$did,PDO::PARAM_STR);
+        $query->execute();
 
-    // code for action taken on leave
-    if(isset($_POST['update'])){ 
-    $did=intval($_GET['leaveid']);
-    $description=$_POST['description'];
-    $status=$_POST['status'];   
-    date_default_timezone_set('Asia/Kolkata');
-    $admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
+        // code for action taken on leave
+            if(isset($_POST['update'])){ 
+            $did=intval($_GET['leaveid']);
+            $description=$_POST['description'];
+            $status=$_POST['status'];   
+            date_default_timezone_set('Asia/Kolkata');
+            $admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
 
-    $sql = "UPDATE leave_requests set AdminRemark = :description, Status =:status, AdminRemarkDate =:admremarkdate where SN=:did";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':description', $description, PDO::PARAM_STR);
-    $query->bindParam(':status', $status, PDO::PARAM_STR);
-    $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
-    $query->bindParam(':did', $did, PDO::PARAM_STR);
-    $query->execute();
-    $msg="Leave updated Successfully";
-    } ?>
+            $sql = "UPDATE leave_requests SET AdminRemark = :description, Status =:status, AdminRemarkDate =:admremarkdate where SN=:did";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':description', $description, PDO::PARAM_STR);
+            $query->bindParam(':status', $status, PDO::PARAM_STR);
+            $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
+            $query->bindParam(':did', $did, PDO::PARAM_STR);
+            $query->execute();
+
+            // $sql = "UPDATE leave_balance SET balance - (leave_requests.fromDate - leave_requests.toDate)
+            //         WHERE SN=:did";
+            // $query = $dbh->prepare($sql);
+            // $query->bindParam(':description', $description, PDO::PARAM_STR);
+            // $query->bindParam(':status', $status, PDO::PARAM_STR);
+            // $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
+            // $query->bindParam(':did', $did, PDO::PARAM_STR);
+            // $query->execute();
+
+            $msg="Leave updated Successfully";
+            } 
+?>
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -225,8 +237,9 @@
                                                                     if($result->AdminRemark == ""){
                                                                         echo "Waiting for Action";  
                                                                     }else{
-                                                                        echo htmlentities($result->AdminRemark);
-                                                                    }?>
+                                                                        echo htmlentities($result->AdminRemark);?>
+
+                                                                    <?php }?>
                                                                 </td>
                                                             </tr>
 
@@ -235,14 +248,12 @@
                                                                 <td>
                                                                     <?php
                                                                     if($result->AdminRemarkDate==""){
-                                                                        echo "NA";  
+                                                                        echo "N/A";  
                                                                     }else{
                                                                         echo htmlentities($result->AdminRemarkDate);
                                                                     }?>
                                                                 </td>
                                                             </tr>
-
-                                                            <?php if($stats==0){?>
                                                             <tr>
                                                                 <td colspan="12">
                                                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">SET ACTION</button>
@@ -277,7 +288,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        <?php } ?>
+
                                                         </form>
                                                     </tr>
                                                     <?php $cnt++;} }?>

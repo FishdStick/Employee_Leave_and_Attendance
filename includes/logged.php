@@ -1,7 +1,7 @@
 <?php
     include '../includes/dbconn.php';
     
-    $eid=$_SESSION['eid'];
+    $eid = $_SESSION['eid'];
     $sql = "SELECT fName,empCode from employee where SN =:eid";
     $query = $dbh -> prepare($sql);
     $query->bindParam(':eid',$eid,PDO::PARAM_STR);
