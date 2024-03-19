@@ -1,10 +1,24 @@
 <?php
+
     session_start();
     error_reporting(0);
     include('../includes/dbconn.php');
     if(strlen($_SESSION['alogin'])==0){   
         header('location:index.php');
     } else {
+        if(isset($_GET['del'])){
+            $id = $_GET['del'];
+
+            $sql = "DELETE FROM positions  WHERE SN=:id";
+
+            $query = $dbh->prepare($sql);
+            $query -> bindParam(':id',$id, PDO::PARAM_STR);
+            $query -> execute();
+
+            $msg = "The selected position has been deleted";
+
+        }
+
 ?>
 
 <!doctype html>
@@ -52,7 +66,7 @@
             <div class="main-menu">
                 <div class="menu-inner">
                     <?php
-                        $page='attedance';
+                        $page='position';
                         include '../includes/admin-sidebar.php';
                     ?>
                 </div>
@@ -95,10 +109,10 @@
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title pull-left">Attendance</h4>
+                            <h4 class="page-title pull-left">Positions</h4>
                             <ul class="breadcrumbs pull-left">
                                 <li><a href="dashboard.php">Home</a></li>
-                                <li><span>Attendance Sheet</span></li>
+                                <li><span>Positions Management</span></li>
                             </ul>
                         </div>
                     </div>
@@ -113,8 +127,73 @@
                     </div>
                 </div>
             </div>
-            <!-- page title area end -->           
+            <!-- page title area end -->    
+            
+                <!-- row area start -->
+                <div class="row">
+                    <!-- Dark table start -->
+                    <div class="col-12 mt-5">         
+                        <div class="card">
+                        <?php if($error){?><div class="alert alert-danger alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($error); ?>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            
+                             </div><?php } 
+                                 else if($msg){?><div class="alert alert-success alert-dismissible fade show"><strong>Info: </strong><?php echo htmlentities($msg); ?> 
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                 </div><?php }?>
 
+                            <div class="card-body">
+                                <div class="table-responsive data-tables datatable-dark">
+                                <center><a href="add-position.php" class="btn btn-sm btn-info">Add New Position</a></center>
+                                    <table id="dataTable3" class="table table-hover table-striped text-center">
+                                        <thead class="text-capitalize">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Position Name</th>
+                                                <th>Position Code</th>
+                                                <th>Department Under</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $sql = "SELECT * from positions";
+                                            $query = $dbh -> prepare($sql);
+                                            $query->execute();
+                                            $results = $query->fetchAll(PDO::FETCH_OBJ);
+                                            $cnt = 1;
+                                            if($query->rowCount() > 0)
+                                            {
+                                            foreach($results as $result)
+                                            {               ?>  
+                                            <tr>
+                                                <td><?php echo htmlentities($cnt);?></td>
+                                                <td><?php echo htmlentities($result->posName);?></td>
+                                                <td><?php echo htmlentities($result->posCode);?></td>
+                                                <td><?php echo htmlentities($result->department);?></td>
+                                                <td>
+                                                    <a href="edit-department.php?deptid=<?php echo htmlentities($result->SN);?>">
+                                                    <i class="fa fa-edit" style="color:green"></i></a>
+                                                    <a href="position.php?del=<?php echo htmlentities($result->SN);?>" onclick="return confirm('Do you want to delete');"> 
+                                                    <i class="fa fa-trash" style="color:red"></i></a>
+                                                </td>
+                                            </tr>
+                                         <?php $cnt++;} }?>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dark table end -->
+                    
+                </div>
+                <!-- row area end -->
+            </div>
+            <!-- row area start-->
             <?php include '../includes/footer.php' ?>
         <!-- footer area end-->
         </div>

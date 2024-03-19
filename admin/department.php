@@ -55,14 +55,14 @@
 </head>
 
 <body>
-    <!-- preloader area start -->
+    <!-- Circular Loading Start -->
     <div id="preloader">
         <div class="loader"></div>
     </div>
-    <!-- preloader area end -->
+    <!-- Circular Loading End -->
     
     <div class="page-container">
-        <!-- sidebar menu area start -->
+        <!-- Vertical Navbar Start -->
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
@@ -78,7 +78,8 @@
                 </div>
             </div>
         </div>
-        <!-- sidebar menu area end -->
+        <!-- Vertical Navbar End -->
+
         <!-- main content area start -->
         <div class="main-content">
             <!-- header area start -->
@@ -107,6 +108,7 @@
                 </div>
             </div>
             <!-- header area end -->
+            
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">

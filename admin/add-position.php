@@ -10,24 +10,16 @@
     } else {
         if(isset($_POST['add'])){
             try{
-                $empid = $_POST['empcode'];
-                $fname = $_POST['firstName'];
+                $poscode = $_POST['poscode'];
                 $department = $_POST['department'];
-                $position = $_POST['position']; 
-                $email = $_POST['email']; 
-                $password = md5($_POST['password']); 
-                $status = 1;
-    
-                $sql="INSERT INTO employee(empCode,fName,department,position,email,password,status) VALUES (:empid,:fname,:department,:position,:email,:password,:status)";
+                $posname = $_POST['posname'];
+  
+                $sql="INSERT INTO positions(posCode,department,posName) VALUES (:poscode,:department,:posname)";
                 $query = $dbh->prepare($sql);
-                $query->bindParam(':empid',$empid,PDO::PARAM_STR);
-                $query->bindParam(':fname',$fname,PDO::PARAM_STR);
+                $query->bindParam(':poscode',$poscode,PDO::PARAM_STR);
                 $query->bindParam(':department',$department,PDO::PARAM_STR);
-                $query->bindParam(':position',$position,PDO::PARAM_STR);
-                $query->bindParam(':email',$email,PDO::PARAM_STR);
-                $query->bindParam(':password',$password,PDO::PARAM_STR);
-                $query->bindParam(':status',$status,PDO::PARAM_STR);
-    
+                $query->bindParam(':posname',$posname,PDO::PARAM_STR);
+
                 $query->execute();
     
                 $lastInsertId = $dbh->lastInsertId();
@@ -75,48 +67,7 @@
     <!-- modernizr css -->
     <script src="../assets/js/vendor/modernizr-2.8.3.min.js"></script>
 
-    <!-- Custom form script -->
-    <script type="text/javascript">
-        function valid(){
-            if(document.addemp.password.value!= document.addemp.confirmpassword.value) {
-            alert("New Password and Confirm Password Field do not match  !!");
-            document.addemp.confirmpassword.focus();
-            return false;
-                } return true;
-        }
-    </script>
-
-    <script>
-        function checkAvailabilityEmpid() {
-            $("#loaderIcon").show();
-            jQuery.ajax({
-            url: "check_availability.php",
-            data:'empcode='+$("#empcode").val(),
-            type: "POST",
-            success:function(data){
-            $("#empid-availability").html(data);
-            $("#loaderIcon").hide();
-            },
-            error:function (){}
-            });
-        }
-    </script>
-
-    <script>
-        function checkAvailabilityEmailid() {
-            $("#loaderIcon").show();
-            jQuery.ajax({
-            url: "check_availability.php",
-            data:'emailid='+$("#email").val(),
-            type: "POST",
-            success:function(data){
-            $("#emailid-availability").html(data);
-            $("#loaderIcon").hide();
-            },
-            error:function (){}
-            });
-        }
-    </script>
+    
 </head>
 
 <body>
@@ -173,9 +124,9 @@
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title pull-left">Add Employee Section</h4>
+                            <h4 class="page-title pull-left">Add New Position</h4>
                             <ul class="breadcrumbs pull-left"> 
-                                <li><a href="employees.php">Employee</a></li>
+                                <li><a href="position.php">Position</a></li>
                                 <li><span>Add</span></li>
                                 
                             </ul>
@@ -214,21 +165,24 @@
                                 </button>
                                  </div><?php }?>
                                 <div class="card">
-                                <form name="addemp" method="POST">
+                                <form name="addpos" method="POST">
 
                                     <div class="card-body">
-                                        <p class="text-muted font-14 mb-4">Fill Up the form to add new employee to records</p>
-                                        <p class="text-muted font-14 mb-4 alert-danger">Please ensure to fill up Department first before anything else</p>
+                                        <p class="text-muted font-14 mb-4">Fill Up the form to add new position to records</p>
                                         
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="col-form-label">Position Code</label>
+                                            <input class="form-control" name="poscode"  type="text" required id="example-text-input">
+                                        </div>
+
                                         <!-- Department -->
                                         <div class="form-group">
                                             <label class="col-form-label">Department</label>
-                                            <select class="custom-select" name="department" onchange="this.form.submit()" autocomplete="off">
+                                            <select class="custom-select" name="department" autocomplete="off">
                                                 <option value="">Choose...</option>
                                                 <?php 
-                                                    $selectedDepartment = isset($_POST['department']) ? $_POST['department'] : '';
-                                                    
-                                                    $sql = "SELECT deptName 
+
+                                                    $sql = "SELECT deptCode 
                                                             FROM departments";
 
                                                     $query = $dbh -> prepare($sql);
@@ -236,71 +190,21 @@
                                                     $results = $query->fetchAll(PDO::FETCH_OBJ);
                                                     $cnt = 1;
                                                     if($query->rowCount() > 0){
-                                                    foreach($results as $result){   
-                                                        $selected = ($selectedDepartment == $result->deptName) ? 'selected' : '';
-                                                ?>
-                                                <option value="<?php echo htmlentities($result->deptName); ?>" <?php echo $selected; ?>>
-                                                    <?php echo htmlentities($result->deptName); ?>
+                                                    foreach($results as $result){ ?>
+                                                <option value="<?php echo htmlentities($result->deptCode); ?>">
+                                                    <?php echo htmlentities($result->deptCode); ?>
                                                 </option>
 
                                                 <?php }} ?>
                                             </select>
                                         </div>
-                                        
-                                        <!-- Position -->
-                                        <div class="form-group">
-                                            <label class="col-form-label">Position</label>
-                                            <select class="custom-select" name="position" autocomplete="off">
-                                                <option value="">Choose...</option>
-                                                <?php 
-                                                
-                                                $sql = "SELECT posName 
-                                                        FROM positions 
-                                                        JOIN departments ON positions.department = departments.deptCode 
-                                                        WHERE deptName = :department";
-
-                                                $query = $dbh -> prepare($sql);
-                                                $query->bindParam(':department',$selectedDepartment,PDO::PARAM_STR);
-                                                $query->execute();
-                                                $results = $query->fetchAll(PDO::FETCH_OBJ);
-                                                $cnt=1;
-                                                if($query->rowCount() > 0){
-                                                foreach($results as $result)
-                                                {   ?> 
-                                                <option value="<?php echo htmlentities($result->posName);?>"><?php echo htmlentities($result->posName);?></option>
-                                                <?php }} ?>
-                                            </select>
-                                        </div>
 
                                         <div class="form-group">
-                                            <label for="example-text-input" class="col-form-label">Employee ID</label>
-                                            <input class="form-control" name="empcode" type="text" autocomplete="off" required id="empcode" onBlur="checkAvailabilityEmpid()">
-                                        </div>
-                                    
-
-                                        <div class="form-group">
-                                            <label for="example-text-input" class="col-form-label">First Name</label>
-                                            <input class="form-control" name="firstName"  type="text" required id="example-text-input">
+                                            <label for="example-text-input" class="col-form-label">Position Name</label>
+                                            <input class="form-control" name="posname" type="text" autocomplete="off" required id="empcode">
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="example-email-input" class="col-form-label">Email</label>
-                                            <input class="form-control" name="email" type="email" autocomplete="off" required id="example-email-input">
-                                        </div>
-
-                                        <h4>Set Password for Employee Login</h4>
-
-                                        <div class="form-group">
-                                            <label for="example-text-input" class="col-form-label">Password</label>
-                                            <input class="form-control" name="password" type="password" autocomplete="off" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="example-text-input" class="col-form-label">Confirmation Password</label>
-                                            <input class="form-control" name="confirmpassword" type="password" autocomplete="off" required>
-                                        </div>
-
-                                        <button class="btn btn-primary" name="add" id="update" type="submit" onclick="return valid();">PROCEED</button>
+                                        <button class="btn btn-primary" name="add" id="add" type="submit" onclick="return valid();">PROCEED</button>
                                         
                                     </div>
                                 </form>

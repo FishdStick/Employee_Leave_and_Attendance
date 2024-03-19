@@ -168,11 +168,54 @@
                                             $query->execute();
                                             $results = $query->fetchAll(PDO::FETCH_OBJ);
                                             $cnt = 1;
-                                            if($query->rowCount() > 0)
-                                            {
-                                            foreach($results as $result)
-                                            {               ?> 
-                                    
+                                            if($query->rowCount() > 0){
+                                                foreach($results as $result)
+                                        {  ?> 
+                                        
+                                        <!-- Department -->
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="col-form-label">Department</label>
+                                                <?php
+                                                    $selectedDepartment = isset($_POST['department']) ? $_POST['department'] : '';
+                                                ?>
+                                            <input class="form-control" name="department" value="<?php echo htmlentities($result->department);?>"  type="text" readonly required id="example-text-input">
+                                        </div>
+
+                                        <!-- Position -->
+                                        <div class="form-group">
+                                            <label class="col-form-label">Position</label>
+                                            <select class="custom-select" name="position" autocomplete="off">
+                                                <option value="<?php echo htmlentities($result->position);?>">
+                                                    <?php echo htmlentities($result->position);?>
+                                                </option>
+
+                                                    <?php 
+                                                        $sql = "SELECT posName 
+                                                                FROM positions
+                                                                JOIN departments ON positions.department = departments.deptCode 
+                                                                WHERE deptName = :department";
+                                                                
+                                                        $query = $dbh -> prepare($sql);
+                                                        $query = $dbh -> prepare($sql);
+                                                        $query->bindParam(':department',$selectedDepartment,PDO::PARAM_STR);
+                                                        $query->execute();
+                                                        $posCodeResults = $query->fetchAll(PDO::FETCH_OBJ);
+                                                        $cnt = 1;
+                                                        if($query->rowCount() > 0){
+                                                        foreach($posCodeResults as $posCodeResult)
+                                                        {   
+                                                    ?>
+                                                      
+                                                <option value="<?php echo htmlentities($posCodeResult->posName);?>">
+                                                    <?php echo htmlentities($posCodeResult->posName);?>
+                                                </option>
+                                            <?php }} ?>
+                                            </select>
+                                        </div>
+
+                                        <?php }
+                                        }?>
+
                                         <div class="form-group">
                                             <label for="example-text-input" class="col-form-label">Employee ID</label>
                                             <input class="form-control" name="empcode" type="text" autocomplete="off" readonly required value="<?php echo htmlentities($result->empCode);?>" id="example-text-input">
@@ -187,57 +230,6 @@
                                             <label for="example-email-input" class="col-form-label">Email</label>
                                             <input class="form-control" name="email" type="email" value="<?php echo htmlentities($result->email);?>" readonly autocomplete="off" required id="example-email-input">
                                         </div>
-
-                                        <div class="form-group">
-                                            <label class="col-form-label">Department</label>
-                                            <select class="custom-select" name="department" autocomplete="off">
-                                                <option value="<?php echo htmlentities($result->department);?>">
-                                                    <?php echo htmlentities($result->department);?>
-                                                </option>
-
-                                                    <?php $sql = "SELECT deptCode from departments";
-                                                        $query = $dbh -> prepare($sql);
-                                                        $query->execute();
-                                                        $deptCodeResults = $query->fetchAll(PDO::FETCH_OBJ);
-                                                        $cnt = 1;
-                                                        if($query->rowCount() > 0){
-                                                        foreach($deptCodeResults as $deptCodeResult)
-                                                        {   
-                                                    ?>  
-
-                                                <option value="<?php echo htmlentities($deptCodeResult->deptCode);?>">
-                                                    <?php echo htmlentities($deptCodeResult->deptCode);?>
-                                                </option>
-                                                <?php }} ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-form-label">Position</label>
-                                            <select class="custom-select" name="position" autocomplete="off">
-                                                <option value="<?php echo htmlentities($result->position);?>">
-                                                    <?php echo htmlentities($result->position);?>
-                                                </option>
-
-                                                    <?php $sql = "SELECT posCode from positions";
-                                                        $query = $dbh -> prepare($sql);
-                                                        $query->execute();
-                                                        $posCodeResults = $query->fetchAll(PDO::FETCH_OBJ);
-                                                        $cnt = 1;
-                                                        if($query->rowCount() > 0){
-                                                        foreach($posCodeResults as $posCodeResult)
-                                                        {   
-                                                    ?>
-                                                      
-                                                <option value="<?php echo htmlentities($posCodeResult->posCode);?>">
-                                                    <?php echo htmlentities($posCodeResult->posCode);?>
-                                                </option>
-                                            <?php }} ?>
-                                            </select>
-                                        </div>
-
-                                        <?php }
-                                        }?>
 
                                         <button class="btn btn-primary" name="update" id="update" type="submit">MAKE CHANGES</button>
                                         
