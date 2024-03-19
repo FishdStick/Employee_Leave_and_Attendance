@@ -68,11 +68,12 @@
 
 .card {
   border: none;
+  background-color: #ECEEEA;
   border-radius: 4px;
-  background-color: #6A994E;
   -webkit-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
 }
+
 
 .card:hover {
   box-shadow: 0 5px 30px rgba(15, 212, 15, 0.253);
@@ -89,7 +90,7 @@
 
 .main-content {
   width: 100%;
-  background: #fefae0;
+  background: #DDE3D5;
 }
 
 .main-content-inner {
@@ -175,7 +176,7 @@
   font-family: fontawesome;
   right: 15px;
   top: 12px;
-  color: #6A994E;
+  color: #386641;
   font-size: 20px;
 }
 
@@ -212,12 +213,12 @@
 
 .metismenu li:hover > a,
 .metismenu li.active > a {
-  color: #6A994E;
+  color: #386641;
 }
 
 .metismenu li:hover > a i,
 .metismenu li.active > a i {
-  color: #6A994E;
+  color: #386641;
 }
 
 .metismenu li li a:after {
@@ -229,7 +230,7 @@
 /*-------------------- 2.1.1 Horizontal Menu -------------------*/
 
 .body-bg {
-  background: #002308;
+  background: #373536;
 }
 
 .horizontal-main-wrapper {
@@ -264,7 +265,7 @@
 }
 
 .mainheader-area .logo a span {
-  color: #002308;
+  color: #373536;
 }
 
 .horizontal-menu {
@@ -280,13 +281,13 @@
   display: block;
   font-size: 13px;
   padding: 10px 20px;
-  color: #002308;
+  color: #373536;
   text-transform: capitalize;
 }
 
 .horizontal-menu ul li:hover > a,
 .horizontal-menu ul li.active > a {
-  color: #002308;
+  color: #373536;
 }
 
 .horizontal-menu nav > ul > li:first-child > a {
@@ -303,7 +304,7 @@
   top: 100%;
   z-index: 99;
   width: 200px;
-  background: #002308;
+  background: #373536;
   opacity: 0;
   visibility: hidden;
   border-top: 4px solid #007bff;
@@ -393,7 +394,7 @@
 
 .header-area {
   padding: 15px 30px;
-  background: #386641;
+  background: #373536;
   border-bottom: 1px solid #386641;
 }
 
@@ -514,7 +515,7 @@
   font-family: "Poppins", sans-serif;
   font-size: 10px;
   font-weight: 600;
-  color: #6A994E;
+  color: #386641;
   background: var(--primary-color);
   height: 20px;
   width: 20px;
@@ -533,7 +534,7 @@
 }
 
 .notify-title {
-  background: var(--primary-color);
+  background: #ECBA4F;
   display: block;
   padding: 18px 30px;
   color: #fefae0;
@@ -715,7 +716,7 @@ ul.breadcrumbs {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   background: -webkit-linear-gradient(left, #8914fe 0%, #8063f5 100%);
-  background: linear-gradient(to right, #ffc107 0%, #ffc107 100%);
+  background: linear-gradient(to right, #386641 0%, #386641 100%);
   padding: 17px 38px;
   position: relative;
 }
@@ -758,7 +759,7 @@ ul.breadcrumbs {
 
 .notification-area .dropdown-menu,
 .user-profile .dropdown-menu {
-  background: #6A994E;
+  background: #386641;
   border: #386641;
   -webkit-transform: none !important;
   transform: none !important;
@@ -804,7 +805,7 @@ ul.breadcrumbs {
 /*-------------------- 2.4 Fact Area ------------------- */
 
 .single-report {
-  background: #fff;
+  background: #ECEEEA;
   overflow: hidden;
   position: relative;
 }
@@ -816,7 +817,7 @@ ul.breadcrumbs {
 .single-report .icon {
   font-size: 32px;
   color: #fff;
-  background: var(--primary-color);
+  background: #386641;
   height: 95px;
   width: 100px;
   text-align: right;
@@ -1737,7 +1738,7 @@ table.dbkit-table tr td {
 }
 
 .alert-items .alert-primary {
-  color: #4796ea;
+  color: #000408;
   background-color: #c8e1fb;
 }
 
@@ -2158,8 +2159,8 @@ table.dataTable thead td {
 /* datatable-dark */
 
 .datatable-dark thead {
-  background: #6A994E;
-  color: #001A23;
+  background: #386641;
+  color: #ffffff;
 }
 
 .datatable-dark .dataTables_paginate .page-item.active .page-link,
@@ -2295,7 +2296,11 @@ table.dataTable thead td {
 /*-------------------- 23. Login ------------------- */
 
 .login-area {
-  background: #f3f8fb;
+  background-image: url('../images/bg.png');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-color: #f3f8fb; 
 }
 
 .login-box {
