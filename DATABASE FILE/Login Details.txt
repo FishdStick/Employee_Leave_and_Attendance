@@ -1,0 +1,16 @@
+**Admin Login Details**
+
+Username: test
+Password: 1234
+
+**Employee Login Details**
+
+Email: (Choose one)
+jane@mail.com
+jude@mail.com
+jonas@mail.com
+jonathan@mail.com
+
+Password: 1234 
+(all passwords are 1234)
+

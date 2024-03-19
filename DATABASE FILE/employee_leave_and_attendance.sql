@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2022 at 05:11 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Generation Time: Mar 19, 2024 at 04:00 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `employeeleavedb`
+-- Database: `employee_leave_and_attendance`
 --
 
 -- --------------------------------------------------------
@@ -32,7 +33,7 @@ CREATE TABLE `admin` (
   `Password` varchar(100) NOT NULL,
   `fullname` varchar(255) NOT NULL,
   `email` varchar(55) NOT NULL,
-  `updationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updationDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -41,144 +42,190 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `UserName`, `Password`, `fullname`, `email`, `updationDate`) VALUES
 (1, 'admin', 'd00f5d5217896fb7fd601412cb890830', 'Liam Moore', 'admin@mail.com', '2022-02-09 15:15:46'),
-(2, 'bruno', '5f4dcc3b5aa765d61d8327deb882cf99', 'Bruno Den', 'itsbruno@mail.com', '2022-02-09 15:15:50'),
-(3, 'greenwood', '5f4dcc3b5aa765d61d8327deb882cf99', 'Johnny Greenwood', 'greenwood@mail.com', '2022-02-09 15:15:54');
+(4, 'test', '81dc9bdb52d04dc20036dbd8313ed055', 'TestAdmin', 'Test@mail.com', '2024-02-29 18:02:52');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbldepartments`
+-- Table structure for table `departments`
 --
 
-CREATE TABLE `tbldepartments` (
-  `id` int(11) NOT NULL,
-  `DepartmentName` varchar(150) DEFAULT NULL,
-  `DepartmentShortName` varchar(100) NOT NULL,
-  `DepartmentCode` varchar(50) DEFAULT NULL,
-  `CreationDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `departments` (
+  `SN` int(10) NOT NULL,
+  `deptCode` varchar(50) NOT NULL,
+  `deptName` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbldepartments`
+-- Dumping data for table `departments`
 --
 
-INSERT INTO `tbldepartments` (`id`, `DepartmentName`, `DepartmentShortName`, `DepartmentCode`, `CreationDate`) VALUES
-(1, 'Human Resource', 'HR', 'HR160', '2020-11-01 07:16:25'),
-(2, 'Information Technology', 'IT', 'IT807', '2020-11-01 07:19:37'),
-(3, 'Operations', 'OP', 'OP640', '2020-12-02 21:28:56'),
-(4, 'Volunteer', 'VL', 'VL9696', '2021-03-03 08:27:52'),
-(5, 'Marketing', 'MK', 'MK369', '2021-03-03 10:53:52'),
-(6, 'Finance', 'FI', 'FI123', '2021-03-03 10:54:27'),
-(7, 'Sales', 'SS', 'SS469', '2021-03-03 10:55:24'),
-(8, 'Research', 'RS', 'RS666', '2021-03-03 16:39:03');
+INSERT INTO `departments` (`SN`, `deptCode`, `deptName`) VALUES
+(1, 'DPTACCT01', 'Accounting'),
+(2, 'DPTIT02', 'I.T.');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblemployees`
+-- Table structure for table `employee`
 --
 
-CREATE TABLE `tblemployees` (
-  `id` int(11) NOT NULL,
-  `EmpId` varchar(100) NOT NULL,
-  `FirstName` varchar(150) NOT NULL,
-  `LastName` varchar(150) NOT NULL,
-  `EmailId` varchar(200) NOT NULL,
-  `Password` varchar(180) NOT NULL,
-  `Gender` varchar(100) NOT NULL,
-  `Dob` varchar(100) NOT NULL,
-  `Department` varchar(255) NOT NULL,
-  `Address` varchar(255) NOT NULL,
-  `City` varchar(200) NOT NULL,
-  `Country` varchar(150) NOT NULL,
-  `Phonenumber` char(11) NOT NULL,
-  `Status` int(1) NOT NULL,
-  `RegDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `employee` (
+  `SN` int(10) NOT NULL,
+  `empCode` varchar(50) NOT NULL,
+  `fName` varchar(255) NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `position` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `status` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tblemployees`
+-- Dumping data for table `employee`
 --
 
-INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Status`, `RegDate`) VALUES
-(1, 'ASTR001245', 'Johnny', 'Scott', 'johnny@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Male', '1996-06-12', 'Information Technology', '49 Arron Smith Drive', 'Honolulu', 'US', '7854785477', 1, '2020-11-10 11:29:59'),
-(2, 'ASTR001369', 'Milton', 'Doe', 'milt@mail.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '1990-02-02', 'Operations', '15 Kincheloe Road', 'Salem', 'US', '8587944255', 1, '2020-11-10 13:40:02'),
-(3, 'ASTR004699', 'Shawn', 'Den', 'Shawnden@mail.com', '3b87c97d15e8eb11e51aa25e9a5770e9', 'Male', '1995-03-22', 'Human Resource', '239 Desert Court', 'Wayne', 'US', '7458887169', 1, '2021-03-03 07:24:17'),
-(4, 'ASTR002996', 'Carol', 'Reed', 'carol@mail.com', '723e1489a45d2cbaefec82eee410abd5', 'Female', '1989-03-23', 'Volunteer', 'Demo Address', 'Demo City', 'Demo Country', '7854448550', 1, '2021-03-03 10:44:13'),
-(5, 'ASTR001439', 'Danny', 'Wood', 'danny@mail.com', 'b7bee6b36bd35b773132d4e3a74c2bb5', 'Male', '1986-03-12', 'Research', '11 Rardin Drive', 'San Francisco', 'US', '4587777744', 1, '2021-03-04 17:14:48'),
-(6, 'ASTR006946', 'Shawn', 'Martin', 'shawn@mail.com', 'a3cceba83235dc95f750108d22c14731', 'Male', '1992-08-28', 'Finance', '3259 Ray Court', 'Wilmington', 'US', '8520259670', 1, '2021-03-04 17:46:02'),
-(7, 'ASTR000084', 'Jennifer', 'Foltz', 'jennifer@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Female', '1992-12-11', 'Marketing', '977 Smithfield Avenue', 'Elkins', 'US', '7401256696', 1, '2022-02-09 15:29:00'),
-(8, 'ASTR012447', 'Will', 'Williams', 'williams@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Male', '1992-02-15', 'Research', '366 Cemetery Street', 'Houston', 'US', '7854000065', 1, '2022-02-10 15:52:32');
+INSERT INTO `employee` (`SN`, `empCode`, `fName`, `department`, `position`, `email`, `password`, `status`) VALUES
+(1, 'EMP01', 'Judesss', 'I.T.', 'I.T.  Auxillary Staff', 'jude@mail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1),
+(2, 'EMP02', 'Jane', 'Accounting', 'Accountant Head', 'jane@mail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1),
+(5, 'EMP03', 'Jonases', 'Accounting', 'Accountant', 'jonas@mail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1),
+(6, 'EMP0231', 'Jonathan', 'I.T.', 'I.T.  Auxillary Staff', 'jonathan@mail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1),
+(7, 'EMP0134', 'Jill', 'Accounting', 'Accountant', 'jill@mail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblleaves`
+-- Table structure for table `leaves_per_position`
 --
 
-CREATE TABLE `tblleaves` (
-  `id` int(11) NOT NULL,
-  `LeaveType` varchar(110) NOT NULL,
-  `ToDate` varchar(120) NOT NULL,
-  `FromDate` varchar(120) NOT NULL,
-  `Description` mediumtext NOT NULL,
-  `PostingDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `AdminRemark` mediumtext,
-  `AdminRemarkDate` varchar(120) DEFAULT NULL,
-  `Status` int(1) NOT NULL,
-  `IsRead` int(1) NOT NULL,
-  `empid` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `leaves_per_position` (
+  `SN` int(10) NOT NULL,
+  `posCode` varchar(50) NOT NULL,
+  `allowedLeaves` varchar(255) NOT NULL,
+  `count` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tblleaves`
+-- Dumping data for table `leaves_per_position`
 --
 
-INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`) VALUES
-(7, 'Casual Leave', '30/11/2020', '29/10/2020', 'Test Test Demo Test Test Demo Test Test Demo', '2020-11-19 13:11:21', 'A demo Admin Remarks for Testing!', '2020-12-02 23:26:27 ', 2, 1, 1),
-(8, 'Medical Leave', '21/10/2020', '25/10/2020', 'Test Test Demo Test Test Demo Test Test Demo Test Test Demo', '2020-11-20 11:14:14', 'A demo Admin Remarks for Testing!', '2020-12-02 23:24:39 ', 1, 1, 1),
-(9, 'Medical Leave', '08/12/2020', '12/12/2020', 'This is a demo description for testing purpose', '2020-12-02 18:26:01', 'All good make your time and hope you\'ll be fine and get back to work asap! Best Regards, Admin.', '2021-03-03 11:19:29 ', 1, 1, 2),
-(10, 'Restricted Holiday', '25/12/2020', '25/12/2020', 'This is a demo description for testing purpose', '2020-12-03 08:29:07', 'A demo Admin Remarks for Testing!', '2020-12-03 14:06:12 ', 1, 1, 1),
-(11, 'Medical Leave', '02/12/2020', '06/12/2020', 'This is a demo description for testing purpose', '2020-04-29 15:01:14', 'A demo Admin Remarks for Testing!', '2020-04-29 20:33:21 ', 1, 1, 1),
-(12, 'Casual Leave', '02/02/2020', '03/03/2020', 'This is a demo description for testing purpose', '2020-07-03 08:11:11', 'A demo Admin Remarks for Testing!', '2020-07-03 13:42:05 ', 1, 1, 1),
-(14, 'Medical Leave', '2020-03-05', '2020-06-05', 'This is a demo description for testing purpose', '2021-03-02 09:31:01', NULL, NULL, 0, 1, 2),
-(15, 'Casual Leave', '2021-03-15', '2021-03-05', 'None, Testing', '2021-03-02 09:32:42', 'casual leave not allowed for a week, the company\'s gotta huge project which should be completed within this week.', '2021-03-03 11:47:33 ', 2, 1, 1),
-(17, 'Paternity Leave', '2021-03-03', '2021-03-10', 'Being a father i\'ve got to look after my new borns and spend some time with my families too!', '2021-03-03 10:58:18', NULL, NULL, 0, 1, 3),
-(18, 'Medical Leave', '2021-03-04', '2021-03-05', 'i\'ve to go for my body checkup. got an appointment for tommorow', '2021-03-03 12:09:44', 'No comments on it.', '2021-03-04 22:56:24 ', 1, 1, 4),
-(19, 'Compensatory Leave', '2021-03-05', '2021-03-06', 'been working over time since last night, so i\'d like a day off', '2021-03-03 12:24:15', NULL, NULL, 0, 1, 1),
-(20, 'Casual Leave', '2022-02-09', '2022-02-12', 'None, Test Mode', '2022-02-09 15:31:15', NULL, NULL, 0, 0, 7),
-(21, 'Self-Quarantine Leave', '2022-02-11', '2022-02-18', 'This is just a demo condition for testing purpose!!', '2022-02-10 16:05:30', 'No comments!!', '2022-02-10 21:37:15 ', 1, 1, 8);
+INSERT INTO `leaves_per_position` (`SN`, `posCode`, `allowedLeaves`, `count`) VALUES
+(5, 'ACCT243', 'Vacation Leave', 15),
+(6, 'ACCT243', 'Sick Leave', 15),
+(7, 'ACCT243', 'Bereavement Leave', 30),
+(8, 'IT144', 'Bereavement Leave', 30),
+(9, 'IT144', 'Sick Leave', 15),
+(10, 'IT144', 'Vacation Leave', 15);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblleavetype`
+-- Table structure for table `leave_balance`
 --
 
-CREATE TABLE `tblleavetype` (
-  `id` int(11) NOT NULL,
-  `LeaveType` varchar(200) DEFAULT NULL,
-  `Description` mediumtext,
-  `CreationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `leave_balance` (
+  `SN` int(10) NOT NULL,
+  `employee` varchar(50) NOT NULL,
+  `leaveType` int(10) NOT NULL,
+  `balance` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tblleavetype`
+-- Dumping data for table `leave_balance`
 --
 
-INSERT INTO `tblleavetype` (`id`, `LeaveType`, `Description`, `CreationDate`) VALUES
-(1, 'Casual Leave', 'Provided for urgent or unforeseen matters to the employees.', '2020-11-01 12:07:56'),
-(2, 'Medical Leave', 'Related to Health Problems of Employee', '2020-11-06 13:16:09'),
-(3, 'Restricted Holiday', 'Holiday that is optional', '2020-11-06 13:16:38'),
-(5, 'Paternity Leave', 'To take care of newborns', '2021-03-03 10:46:31'),
-(6, 'Bereavement Leave', 'Grieve their loss of losing loved ones', '2021-03-03 10:47:48'),
-(7, 'Compensatory Leave', 'For Overtime workers', '2021-03-03 10:48:37'),
-(8, 'Maternity Leave', 'Taking care of newborn ,recoveries', '2021-03-03 10:50:17'),
-(9, 'Religious Holidays', 'Based on employee\'s followed religion', '2021-03-03 10:51:26'),
-(10, 'Adverse Weather Leave', 'In terms of extreme weather conditions', '2021-03-03 13:18:26'),
-(11, 'Voting Leave', 'For official election day', '2021-03-03 13:19:06'),
-(12, 'Self-Quarantine Leave', 'Related to COVID-19 issues', '2021-03-03 13:19:48'),
-(13, 'Personal Time Off', 'To manage some private matters', '2021-03-03 13:21:10');
+INSERT INTO `leave_balance` (`SN`, `employee`, `leaveType`, `balance`) VALUES
+(1, 'EMP01', 1, 15),
+(2, 'EMP01', 2, 15),
+(3, 'EMP01', 4, 30),
+(4, 'EMP02', 1, 15),
+(5, 'EMP02', 2, 15),
+(6, 'EMP02', 4, 30);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leave_requests`
+--
+
+CREATE TABLE `leave_requests` (
+  `SN` int(10) NOT NULL,
+  `requestee` varchar(50) DEFAULT NULL,
+  `leaveType` varchar(255) DEFAULT NULL,
+  `appliedOn` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` int(1) NOT NULL,
+  `isRead` int(1) NOT NULL,
+  `startDate` varchar(120) NOT NULL,
+  `endDate` varchar(120) NOT NULL,
+  `amount` int(2) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `effectiveDate` int(11) NOT NULL,
+  `AdminRemark` mediumtext DEFAULT NULL,
+  `AdminRemarkDate` varchar(120) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `leave_requests`
+--
+
+INSERT INTO `leave_requests` (`SN`, `requestee`, `leaveType`, `appliedOn`, `status`, `isRead`, `startDate`, `endDate`, `amount`, `description`, `effectiveDate`, `AdminRemark`, `AdminRemarkDate`) VALUES
+(1, 'EMP01', 'Sick Leave', '2024-03-18 21:13:51', 1, 1, '2024-03-19', '2024-03-25', 0, 'Sick', 0, 'Approved!', '2024-03-19 2:43:51 '),
+(2, 'EMP01', 'Bereavement Leave', '2024-03-18 21:41:21', 1, 1, '2024-03-19', '2024-03-29', 0, 'Test Description', 0, 'Approved!', '2024-03-19 3:11:21 '),
+(3, 'EMP01', 'Bereavement Leave', '2024-03-19 13:04:40', 0, 1, '2024-03-19', '2024-03-21', 0, 'safasfa', 0, NULL, NULL),
+(4, 'EMP01', 'Sick Leave', '2024-03-19 13:05:56', 1, 1, '2024-03-22', '2024-03-29', 0, 'ggwghwehwe', 0, 'adada', '2024-03-19 18:35:51 '),
+(5, 'EMP01', 'Vacation Leave', '2024-03-19 13:33:03', 0, 0, '2024-03-23', '2024-03-30', 0, 'Going somewhere', 0, NULL, NULL),
+(6, 'EMP01', 'Bereavement Leave', '2024-03-19 14:19:04', 0, 0, '2024-03-21', '2024-04-06', 0, '', 0, NULL, NULL),
+(7, 'EMP01', 'Sick Leave', '2024-03-19 14:34:07', 2, 1, '2024-03-20', '2024-03-22', 0, 'test description', 0, 'declined', '2024-03-19 20:04:07 '),
+(8, 'EMP01', 'Bereavement Leave', '2024-03-19 14:40:43', 0, 1, '2024-03-20', '2024-03-23', 0, 'test description', 0, NULL, NULL),
+(9, 'EMP01', 'Sick Leave', '2024-03-19 14:42:29', 1, 1, '2024-03-19', '2024-03-22', 0, 'description', 0, 'approved', '2024-03-19 20:12:29 '),
+(10, 'EMP01', 'Vacation Leave', '2024-03-19 14:44:15', 0, 0, '2024-03-21', '2024-03-23', 0, 'test description', 0, NULL, NULL),
+(11, 'EMP01', 'Vacation Leave', '2024-03-19 14:46:50', 2, 1, '2024-03-20', '2024-03-22', 0, 'test', 0, 'declined', '2024-03-19 20:16:50 ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leave_types`
+--
+
+CREATE TABLE `leave_types` (
+  `SN` int(10) NOT NULL,
+  `leaveType` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `leave_types`
+--
+
+INSERT INTO `leave_types` (`SN`, `leaveType`, `description`) VALUES
+(1, 'Vacation Leave', 'Time off for personal reasons, such as travel, rest, or recreation.'),
+(2, 'Sick Leave', 'Paid time off to recover from illness or injury.'),
+(4, 'Bereavement Leave', 'For employees who have experienced the death of a close family member or loved one. ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `positions`
+--
+
+CREATE TABLE `positions` (
+  `SN` int(10) NOT NULL,
+  `posCode` varchar(50) NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `posName` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `positions`
+--
+
+INSERT INTO `positions` (`SN`, `posCode`, `department`, `posName`) VALUES
+(5, 'ACCT243', 'DPTACCT01', 'Accountant'),
+(6, 'IT144', 'DPTIT02', 'I.T.  Auxillary Staff'),
+(9, 'ACCTH01', 'DPTACCT01', 'Accountant Head'),
+(10, 'ACCTO01', 'DPTACCT01', 'Accountant Officer'),
+(11, 'ITH01', 'DPTIT02', 'I.T. Head'),
+(12, 'dsadasd', 'DPTACCT01', 'gasgas');
 
 --
 -- Indexes for dumped tables
@@ -191,29 +238,62 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbldepartments`
+-- Indexes for table `departments`
 --
-ALTER TABLE `tbldepartments`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`SN`),
+  ADD UNIQUE KEY `deptCode` (`deptCode`),
+  ADD UNIQUE KEY `deptName` (`deptName`);
 
 --
--- Indexes for table `tblemployees`
+-- Indexes for table `employee`
 --
-ALTER TABLE `tblemployees`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`SN`),
+  ADD UNIQUE KEY `empCode` (`empCode`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `depNameFK` (`department`),
+  ADD KEY `posNameFK` (`position`);
 
 --
--- Indexes for table `tblleaves`
+-- Indexes for table `leaves_per_position`
 --
-ALTER TABLE `tblleaves`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `UserEmail` (`empid`);
+ALTER TABLE `leaves_per_position`
+  ADD PRIMARY KEY (`SN`),
+  ADD KEY `posCode` (`posCode`),
+  ADD KEY `leave_types_fk` (`allowedLeaves`);
 
 --
--- Indexes for table `tblleavetype`
+-- Indexes for table `leave_balance`
 --
-ALTER TABLE `tblleavetype`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `leave_balance`
+  ADD PRIMARY KEY (`SN`),
+  ADD KEY `employeeFK` (`employee`),
+  ADD KEY `leaveTypeFK` (`leaveType`);
+
+--
+-- Indexes for table `leave_requests`
+--
+ALTER TABLE `leave_requests`
+  ADD PRIMARY KEY (`SN`),
+  ADD KEY `leave_type_FK` (`leaveType`),
+  ADD KEY `empCodeFK` (`requestee`);
+
+--
+-- Indexes for table `leave_types`
+--
+ALTER TABLE `leave_types`
+  ADD PRIMARY KEY (`SN`),
+  ADD UNIQUE KEY `leaveType` (`leaveType`);
+
+--
+-- Indexes for table `positions`
+--
+ALTER TABLE `positions`
+  ADD PRIMARY KEY (`SN`),
+  ADD UNIQUE KEY `posCode` (`posCode`),
+  ADD UNIQUE KEY `posName` (`posName`),
+  ADD KEY `department_fk` (`department`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -223,27 +303,89 @@ ALTER TABLE `tblleavetype`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
--- AUTO_INCREMENT for table `tbldepartments`
+-- AUTO_INCREMENT for table `departments`
 --
-ALTER TABLE `tbldepartments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `departments`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT for table `tblemployees`
+-- AUTO_INCREMENT for table `employee`
 --
-ALTER TABLE `tblemployees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `employee`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
--- AUTO_INCREMENT for table `tblleaves`
+-- AUTO_INCREMENT for table `leaves_per_position`
 --
-ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+ALTER TABLE `leaves_per_position`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
--- AUTO_INCREMENT for table `tblleavetype`
+-- AUTO_INCREMENT for table `leave_balance`
 --
-ALTER TABLE `tblleavetype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `leave_balance`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `leave_requests`
+--
+ALTER TABLE `leave_requests`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `leave_types`
+--
+ALTER TABLE `leave_types`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `positions`
+--
+ALTER TABLE `positions`
+  MODIFY `SN` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `employee`
+--
+ALTER TABLE `employee`
+  ADD CONSTRAINT `depNameFK` FOREIGN KEY (`department`) REFERENCES `departments` (`deptName`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `posNameFK` FOREIGN KEY (`position`) REFERENCES `positions` (`posName`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `leaves_per_position`
+--
+ALTER TABLE `leaves_per_position`
+  ADD CONSTRAINT `leave_types_fk` FOREIGN KEY (`allowedLeaves`) REFERENCES `leave_types` (`leaveType`),
+  ADD CONSTRAINT `leaves_per_position_ibfk_1` FOREIGN KEY (`posCode`) REFERENCES `positions` (`posCode`);
+
+--
+-- Constraints for table `leave_balance`
+--
+ALTER TABLE `leave_balance`
+  ADD CONSTRAINT `employeeFK` FOREIGN KEY (`employee`) REFERENCES `employee` (`empCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `leaveTypeFK` FOREIGN KEY (`leaveType`) REFERENCES `leave_types` (`SN`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `leave_requests`
+--
+ALTER TABLE `leave_requests`
+  ADD CONSTRAINT `empCodeFK` FOREIGN KEY (`requestee`) REFERENCES `employee` (`empCode`),
+  ADD CONSTRAINT `leave_type_FK` FOREIGN KEY (`leaveType`) REFERENCES `leave_types` (`leaveType`);
+
+--
+-- Constraints for table `positions`
+--
+ALTER TABLE `positions`
+  ADD CONSTRAINT `department_fk` FOREIGN KEY (`department`) REFERENCES `departments` (`deptCode`);
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
